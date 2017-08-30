@@ -49,11 +49,25 @@ main :: IO ()
 -- addSpace 0 s = s
 -- addSpace n s = addSpace (n-1) (' ':s)
 
-getIdx l n = if n>0 then l !! n else l !! ((length l) + n)
+-- getIdx l n = if n>0 then l !! n else l !! ((length l) + n)
+
+-- bmiTell :: (RealFloat a) => a -> a -> String
+-- bmiTell weight height
+--     | weight / height ^ 2 <= 18.5 = "You're underweight, you emo, you!"
+--     | weight / height ^ 2 <= 25.0 = "You're supposedly normal. Pffft, I bet you're ugly!"
+--     | weight / height ^ 2 <= 30.0 = "You're fat! Lose some weight, fatty!"
+--     | otherwise                 = "You're a whale, congratulations!"
+
+insertAt :: [a] -> a -> Int -> [a]
+insertAt xs x n = a ++ (x:b) where (a,b) = splitAt n xs
 
 main = do
-    print (getIdx [1,2,3] 1)
-    print (getIdx [1,2,3] (-1))
+    print (insertAt "abc" '.' 1)
+    print (insertAt [0,1,2] 7 3)
+    print (insertAt [] True 0)
+--     print (bmiTell 83 181)
+--     print (getIdx [1,2,3] 1)
+--     print (getIdx [1,2,3] (-1))
 --     print (bar 3 5)
 --     print (bar 0 5)
 --     print (bar 10 5)
