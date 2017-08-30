@@ -1,0 +1,35 @@
+module Main where
+import Ejercicio1
+import Ejercicio2
+import Median
+import Overlap
+import Clamp
+import IsDigit
+import Base2
+--import HexDigit
+import FilterParen
+
+main :: IO()
+main = do
+    print(rule3 1 10 7)
+    print(roundP 10.578 1)
+    print(median 1 2 3)
+    print(overlap 2 4 1 3)
+    print(overlap 0 0 0 0)
+    print(clamp 5 7 1)
+    print(clamp 5 7 6)
+    print(clamp 5 7 8)
+    print(clamp (-1) 0 2)
+    print(isDigit 'a')
+    print(isDigit '0')
+    print(isDigit '9')
+    print(base2 0)
+    print(base2 2)
+    print(base2 15)
+    print(base2 1)
+    --print(base2 (-2))
+    --print(hexDigit '5') not working
+    print(filterParen "abcd")
+    print(filterParen "abcd()")
+    print(filterParen ":):):::)")
+
