@@ -58,13 +58,20 @@ main :: IO ()
 --     | weight / height ^ 2 <= 30.0 = "You're fat! Lose some weight, fatty!"
 --     | otherwise                 = "You're a whale, congratulations!"
 
-insertAt :: [a] -> a -> Int -> [a]
-insertAt xs x n = a ++ (x:b) where (a,b) = splitAt n xs
+-- insertAt :: [a] -> a -> Int -> [a]
+-- insertAt xs x n = a ++ (x:b) where (a,b) = splitAt n xs
+
+find2 (a,b) (x:y:xs) = a == x && b == y || find2 (a,b) (y:xs)
+find2 _ xs = False
+-- find2 (a,b) xs = check (elemIndices a xs) b xs
+-- check ind s xs = (xs !! ((ind !! 0)+1)) == s
 
 main = do
-    print (insertAt "abc" '.' 1)
-    print (insertAt [0,1,2] 7 3)
-    print (insertAt [] True 0)
+    print (find2 (1,2) [1,2])
+    print (find2 (1,2) [2,1])
+--     print (insertAt "abc" '.' 1)
+--     print (insertAt [0,1,2] 7 3)
+--     print (insertAt [] True 0)
 --     print (bmiTell 83 181)
 --     print (getIdx [1,2,3] 1)
 --     print (getIdx [1,2,3] (-1))
