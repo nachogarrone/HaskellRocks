@@ -49,9 +49,11 @@ main :: IO ()
 -- addSpace 0 s = s
 -- addSpace n s = addSpace (n-1) (' ':s)
 
-getIdx []
+getIdx l n = if n>0 then l !! n else l !! ((length l) + n)
 
-main
+main = do
+    print (getIdx [1,2,3] 1)
+    print (getIdx [1,2,3] (-1))
 --     print (bar 3 5)
 --     print (bar 0 5)
 --     print (bar 10 5)
