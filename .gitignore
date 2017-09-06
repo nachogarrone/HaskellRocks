@@ -2,8 +2,6 @@
 dist
 dist-*
 cabal-dev
-*.o
-*.hi
 *.chi
 *.chs.h
 *.dyn_o
