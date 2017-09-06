@@ -19,11 +19,16 @@ _ptosEnvido2 [(a1,a2), (b1,b2), (c1,c2)] = if a1 == b1 then (valorEnvido a2)+(va
 
 _ptosEnvido1 [(a1,a2), (b1,b2), (c1,c2)] = maximum [valorEnvido a2, valorEnvido b2, valorEnvido c2]
 
-
 valorEnvido n = if n>=10 then 0 else n
+
 
 ordNaipe a b = valorCarta a - valorCarta b
 
+
+ganaTruco [n1,n2,n3] [m1,m2,m3]
+    | (ordNaipe n1 m1) == 0 = (ordNaipe n2 m2) > 0 || (ordNaipe n2 m2) == 0 && (ordNaipe n3 m3) >= 0
+    | (ordNaipe n1 m1) > 0 = (ordNaipe n2 m2) >= 0 || (ordNaipe n3 m3) >= 0
+    | (ordNaipe n1 m1) < 0 = (ordNaipe n2 m2) > 0 && (ordNaipe n3 m3) > 0
 
 -- oro copa espada basto
 
