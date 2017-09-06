@@ -1,7 +1,8 @@
 module Main where
 
 -- import TicTacToe
-import Truco
+-- import Truco
+import Entorno
 
 main :: IO ()
 main = do
@@ -20,5 +21,8 @@ main = do
 --     print (ordNaipe (2,1) (3,1))
 --     print (ordNaipe (0,7) (2,7))
 --     print (ordNaipe (1,3) (3,3))
-    print (ganaTruco [(0,4),(1,5),(2,7)] [(2,3),(1,2),(0,4)])
-    print (ganaTruco [(2,7),(0,4),(1,5)] [(2,3),(1,2),(0,4)])
+--    print (ganaTruco [(0,4),(1,5),(2,7)] [(2,3),(1,2),(0,4)])
+--     print (ganaTruco [(2,7),(0,4),(1,5)] [(2,3),(1,2),(0,4)])
+    print(entorno [1])
+    print(entorno [0, 1])
+    print(entorno [0, 0, 0])
