@@ -1,3 +1,6 @@
+import Data.Char
+import Data.List
+
 parseBits :: String -> [Int]
 parseBits texto = map filtrarBits texto
 
