@@ -17,3 +17,8 @@ areDigitStrs strs = all isDigitStr strs
 appendLength :: [[Int]] -> [[Int]]
 appendLength xs = map (\is -> l:is) xs 
    where l = length xs
+
+isSorted :: (Ord a) => [a] -> Bool
+isSorted (a:b:xs) = a <= b && isSorted(b:xs)
+isSorted [a] = True
+isSorted [] = True
