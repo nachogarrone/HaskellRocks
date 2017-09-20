@@ -73,3 +73,8 @@ type Function = [Double] -> [Double] -> Double
 nearest :: Function -> [Double] -> [[Double]] -> [Double]
 nearest fun x ys = n
     where (_,n)= minimum [(fun x y, y) | y <-ys]
+
+
+greatest fun xs = n where (_,n) = maximum [(fun y, y) | y<-xs]
+
+least fun xs = n where (_,n) = minimum [(fun y, y) | y<-xs]
