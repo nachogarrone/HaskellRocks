@@ -2,10 +2,12 @@ module Main where
 
 -- import TicTacToe
 -- import Truco
-import Entorno
+-- import Entorno
+import AltoOrden
 
 main :: IO ()
 main = do
+    print (nearest rmsd [1,2] [1,3])
 --     print (finished ".........")
 --     print (finished "XOOOXX..X")
 --     print (finished "OXOOXXO.X")
@@ -23,6 +25,6 @@ main = do
 --     print (ordNaipe (1,3) (3,3))
 --    print (ganaTruco [(0,4),(1,5),(2,7)] [(2,3),(1,2),(0,4)])
 --     print (ganaTruco [(2,7),(0,4),(1,5)] [(2,3),(1,2),(0,4)])
-    print(entorno [1])
-    print(entorno [0, 1])
-    print(entorno [0, 0, 0])
+--     print(entorno [1])
+--     print(entorno [0, 1])
+--     print(entorno [0, 0, 0])
