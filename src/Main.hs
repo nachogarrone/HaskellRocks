@@ -7,10 +7,13 @@ import AltoOrden
 
 main :: IO ()
 main = do
-    print (greatest (^2) [-2..1])
-    print (least (^2) [-2..1])
-    print (greatest show [-20..20])
-    print (least show [-20..20])
+    print (greatests (^2) [-2..2])
+    print (leasts (^2) [-2..2])
+    print (greatests ((flip mod) 2) [0..5])
+    print (leasts ((flip mod) 3) [0..5])
+--     print (least (^2) [-2..1])
+--     print (greatest show [-20..20])
+--     print (least show [-20..20])
 --     print (nearest rmsd [1.0,2.0] [[1.0,3.0],[2.0,4.0]])
 --     print (finished ".........")
 --     print (finished "XOOOXX..X")

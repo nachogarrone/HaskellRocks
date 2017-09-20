@@ -78,3 +78,9 @@ nearest fun x ys = n
 greatest fun xs = n where (_,n) = maximum [(fun y, y) | y<-xs]
 
 least fun xs = n where (_,n) = minimum [(fun y, y) | y<-xs]
+
+greatest2 fun xs = n where (n,_) = maximum [(fun y, y) | y<-xs]
+greatests fun xs = map snd (filter (\(x,_) -> x == (greatest2 fun xs)) [(fun y, y) | y<-xs])
+
+least2 fun xs = n where (n,_) = minimum [(fun y, y) | y<-xs]
+leasts fun xs = map snd (filter (\(x,_) -> x == (least2 fun xs)) [(fun y, y) | y<-xs])
