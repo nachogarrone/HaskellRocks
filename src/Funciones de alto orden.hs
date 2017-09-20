@@ -57,4 +57,10 @@ hammingDistance :: (Eq a) => [a] -> [a] -> Int
 hammingDistance xs ys = sum(zipWith (\x y -> if x == y then 0 else 1) xs ys) + abs(length xs - length ys)
 
 
-------- Miercoles 20/09 --------
+------- Miércoles 20/09 --------
+
+rmsd :: [Double] -> [Double] -> Double
+rmsd a b
+    | length a /= length b = error "Error!!"
+    | length a == 0 = 0.0
+    | otherwise = sqrt((sum(zipwith(\x y -> (x-y) ** 2) a b)) / fromIntegral (length a))
