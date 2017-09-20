@@ -1,6 +1,29 @@
 import Data.Char
 import Data.List
 
+parseBits :: String -> [Int]
+parseBits texto = map filtrarBits texto
+
+filtrarBits :: Char -> Int
+filtrarBits c = if elem c "01" then digitToInt(c) else error "error"
+
+factorial :: Int -> Int
+factorial a = if(a>0)then foldl (*) 1 [1..a] else error "error"
+
+parseBin :: String -> Int
+parseBin t = foldl (\x y -> x*2+y) 0 (parseBits t)
+
+pairMap :: (a->b)->((a,a)->(b,b))
+pairMap f (a,b) = (f a, f b)
+
+pairMap2 f = (\(a,b)->(f a, f b))
+
+map2 :: (a->a->b)->[a]->[b]
+map2 f l = zipWith f l (drop 1 l)
+
+
+----- Viernes 15/09 -------
+
 isDigitStr :: String -> Bool
 isDigitStr str = foldr(&&) True (map isDigit str)
 
@@ -18,7 +41,7 @@ areDigitStrs :: [String] -> Bool
 areDigitStrs strs = all isDigitStr strs
 
 appendLength :: [[Int]] -> [[Int]]
-appendLength xs = map (\is -> l:is) xs 
+appendLength xs = map (\is -> l:is) xs
    where l = length xs
 
 isSorted :: (Ord a) => [a] -> Bool
@@ -32,3 +55,6 @@ manhattanDistance v1 v2
 
 hammingDistance :: (Eq a) => [a] -> [a] -> Int
 hammingDistance xs ys = sum(zipWith (\x y -> if x == y then 0 else 1) xs ys) + abs(length xs - length ys)
+
+
+------- Miercoles 20/09 --------
