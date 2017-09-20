@@ -70,11 +70,12 @@ rmsd a b
 
 
 type Function = [Double] -> [Double] -> Double
+
 nearest :: Function -> [Double] -> [[Double]] -> [Double]
 nearest fun x ys = n
     where (_,n)= minimum [(fun x y, y) | y <-ys]
 
-
+greatest, least :: (Ord b, Ord a) => (a -> b) -> [a] -> a
 greatest fun xs = n where (_,n) = maximum [(fun y, y) | y<-xs]
 
 least fun xs = n where (_,n) = minimum [(fun y, y) | y<-xs]
