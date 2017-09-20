@@ -5,12 +5,15 @@ module Main where
 -- import Entorno
 import AltoOrden
 
+points = [[1,3],[2,4]]
+
 main :: IO ()
 main = do
-    print (greatests (^2) [-2..2])
-    print (leasts (^2) [-2..2])
-    print (greatests ((flip mod) 2) [0..5])
-    print (leasts ((flip mod) 3) [0..5])
+    print (kNearest rmsd 2 [1,2] points)
+--     print (greatests (^2) [-2..2])
+--     print (leasts (^2) [-2..2])
+--     print (greatests ((flip mod) 2) [0..5])
+--     print (leasts ((flip mod) 3) [0..5])
 --     print (least (^2) [-2..1])
 --     print (greatest show [-20..20])
 --     print (least show [-20..20])

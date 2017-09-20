@@ -85,3 +85,9 @@ greatests fun xs = map snd (filter (\(x,_) -> x == (greatest2 fun xs)) [(fun y, 
 
 least2 fun xs = n where (n,_) = minimum [(fun y, y) | y<-xs]
 leasts fun xs = map snd (filter (\(x,_) -> x == (least2 fun xs)) [(fun y, y) | y<-xs])
+
+
+kNearest fun n xs points
+    | n==0 = []
+    | n>=length points = points
+    | otherwise = [nearest fun xs ((_,n) = maximum [(fun y, y) | y<-xs])]
