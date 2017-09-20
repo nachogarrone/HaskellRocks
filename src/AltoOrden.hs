@@ -69,4 +69,7 @@ rmsd a b
     | otherwise = sqrt((sum(zipWith(\x y -> (x-y) ** 2) a b)) / fromIntegral (length a))
 
 
-nearest fun xs ys = fun xs ys
+type Function = [Double] -> [Double] -> Double
+nearest :: Function -> [Double] -> [[Double]] -> [Double]
+nearest fun x ys = n
+    where (_,n)= minimum [(fun x y, y) | y <-ys]
