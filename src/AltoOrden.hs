@@ -66,7 +66,7 @@ rmsd :: [Double] -> [Double] -> Double
 rmsd a b
     | length a /= length b = error "Error!!"
     | length a == 0 = 0.0
-    | otherwise = sqrt((sum(zipwith(\x y -> (x-y) ** 2) a b)) / fromIntegral (length a))
+    | otherwise = sqrt((sum(zipWith(\x y -> (x-y) ** 2) a b)) / fromIntegral (length a))
 
 
 nearest fun xs ys = fun xs ys
