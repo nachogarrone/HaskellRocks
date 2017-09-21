@@ -88,6 +88,7 @@ leasts fun xs = map snd (filter (\(x,_) -> x == (least2 fun xs)) [(fun y, y) | y
 
 
 kNearest fun n xs points
-    | n==0 = []
-    | n>=length points = points
-    | otherwise = [nearest fun xs ((_,n) = maximum [(fun y, y) | y<-xs])]
+    | n == 0 = []
+    | n >= length points = points
+    | otherwise = take n (map(\(_,x) -> x ) sortedList)
+     where sortedList = sort [(fun xs y, y) | y <- points]
