@@ -10,7 +10,7 @@ points = [[1,3],[2,4]]
 
 main :: IO ()
 main = do
-    print(distincts [1,1,1,1,2,2,2,2,2,2])
+    print(distincts [1,1,1,1,2,2,2,2,2,2,3,3,3,4,5,6,6,7])
 --     print(esNaipeValido (1,3))
 --     print(esNaipeValido (1,12))
 --     print(esNaipeValido (1,13))

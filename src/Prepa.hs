@@ -35,6 +35,5 @@ esNaipeValido naipe
 distincts :: [Int] -> [Int]
 distincts [x] = [x]
 distincts (x:xs)
-    | notElem x y = x:y distincts xs
+    | notElem x xs = x:distincts xs
     | otherwise = distincts xs
-    where y = []
