@@ -8,8 +8,10 @@ data Step2 = StepLeft Int | StepRight Int | StepUp Int | StepDown Int deriving (
 
 data UKLength = Yards Double | Feet Double | Inches Double deriving (Eq, Show)
 
-
 data RPS = Piedra | Papel | Tijera deriving (Eq, Show)
+
+data Numeric = IntNum Int | DblNum Double deriving (Eq, Show)
+
 
 -- monthDays:: Month -> Int -> Int
 monthDays Feb y = if (esBisiesto y) then 29 else 28
@@ -72,3 +74,9 @@ toFeet (Yards n) = (Feet (n*3))
 toYards (Feet n) = (Yards (n/3))
 toYards (Inches n) = (Yards (n*0.0277778))
 toYards (Yards n) = (Yards n)
+
+--addNum :: Numeric -> Numeric -> Numeric
+addNum (IntNum x) (IntNum y) = IntNum (x + y)
+addNum (IntNum x) (DblNum y) = DblNum (fromIntegral x + y)
+addNum (DblNum x) (IntNum y) = DblNum (x + fromIntegral y)
+addNum (DblNum x) (DblNum y) = DblNum (x + y)
