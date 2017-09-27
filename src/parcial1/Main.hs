@@ -5,14 +5,17 @@ module Main where
 -- import Entorno
 -- import AltoOrden
 -- import Prepa
-import Parcialuno
+-- import Parcialuno
+-- import Algebraicos
 
 -- points = [[1,3],[2,4]]
 
 main :: IO ()
 main = do
+    print "parcial1"
+--     print (f)
 --     print (addI_D (Left 1) (Left 2))
-    print (splitMult2 22)
+--     print (splitMult2 22)
 --     print (makeMask "|..||")
 --     print (makeMask "|.a.||")
 --     print (makeMask "")
