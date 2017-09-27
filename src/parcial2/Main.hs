@@ -4,4 +4,6 @@ import Algebraicos
 
 main :: IO ()
 main = do
-    print (monthDays Ene 2017)
+    print (monthDays Feb 2017)
+    print (monthDays Feb 2016)
+    print (monthDays Feb 2015)
