@@ -8,6 +8,7 @@ data Step2 = StepLeft Int | StepRight Int | StepUp Int | StepDown Int deriving (
 
 data UKLength = Yards Double | Feet Double | Inches Double deriving (Eq, Show)
 
+data Colour = RED | BLUE | GREEN | WHITE | BLACK | RGB Int Int Int deriving (Eq, Show)
 
 data RPS = Piedra | Papel | Tijera deriving (Eq, Show)
 
@@ -27,6 +28,13 @@ monthDays Dic _ = 31
 
 esBisiesto::Int->Bool
 esBisiesto x = ( mod x 400==0) || (mod x 4==0) && not (mod x 100==0)
+
+toRGB RED = (RGB 255 0 0)
+toRGB GREEN = (RGB 0 255 0)
+toRGB BLUE = (RGB 0 0 255)
+toRGB BLACK = (RGB 0 0 0)
+toRGB WHITE = (RGB 255 255 255)
+toRGB (RGB a b c) = (RGB a b c)
 
 -- walk :: (Int, Int) -> [Step] -> (Int, Int)
 -- walk a [] = a
