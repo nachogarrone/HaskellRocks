@@ -4,13 +4,20 @@ module Main where
 -- import Truco
 -- import Entorno
 -- import AltoOrden
-import Prepa
+-- import Prepa
+import Parcialuno
 
-points = [[1,3],[2,4]]
+-- points = [[1,3],[2,4]]
 
 main :: IO ()
 main = do
-    print(distincts [1,1,1,1,2,2,2,2,2,2,3,3,3,4,5,6,6,7])
+--     print (addI_D (Left 1) (Left 2))
+    print (splitMult2 22)
+--     print (makeMask "|..||")
+--     print (makeMask "|.a.||")
+--     print (makeMask "")
+--     print (insert 2 1)
+--     print(distincts [1,1,1,1,2,2,2,2,2,2,3,3,3,4,5,6,6,7])
 --     print(esNaipeValido (1,3))
 --     print(esNaipeValido (1,12))
 --     print(esNaipeValido (1,13))
