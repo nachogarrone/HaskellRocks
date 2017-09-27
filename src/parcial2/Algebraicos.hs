@@ -6,6 +6,8 @@ data Month = Ene | Feb | Mar | Abr | May | Jun | Jul | Ago | Sep | Oct | Nov | D
 -- data Step = StepLeft | StepRight | StepUp | StepDown deriving (Eq, Show)
 data Step2 = StepLeft Int | StepRight Int | StepUp Int | StepDown Int deriving (Eq, Show)
 
+data UKLength = Yards Double | Feet Double | Inches Double deriving (Eq, Show)
+
 
 data RPS = Piedra | Papel | Tijera deriving (Eq, Show)
 
@@ -57,3 +59,16 @@ compareRPS Tijera Tijera = 0
 compareRPS Papel Tijera = -1
 compareRPS Papel Piedra = 1
 compareRPS Papel Papel = 0
+
+
+toInches (Feet n) = (Inches (n * 12))
+toInches (Inches n) = (Inches n)
+toInches (Yards n) = (Inches (n*36))
+
+toFeet (Feet n) = (Feet n)
+toFeet (Inches n) = (Feet (n/12))
+toFeet (Yards n) = (Feet (n*3))
+
+toYards (Feet n) = (Yards (n/3))
+toYards (Inches n) = (Yards (n*0.0277778))
+toYards (Yards n) = (Yards n)
