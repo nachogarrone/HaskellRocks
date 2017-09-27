@@ -3,7 +3,9 @@ module Algebraicos where
 
 data Month = Ene | Feb | Mar | Abr | May | Jun | Jul | Ago | Sep | Oct | Nov | Dic deriving (Eq, Show)
 
-data Step = StepLeft | StepRight | StepUp | StepDown deriving (Eq, Show)
+-- data Step = StepLeft | StepRight | StepUp | StepDown deriving (Eq, Show)
+data Step2 = StepLeft Int | StepRight Int | StepUp Int | StepDown Int deriving (Eq, Show)
+
 
 data RPS = Piedra | Papel | Tijera deriving (Eq, Show)
 
@@ -24,14 +26,24 @@ monthDays Dic _ = 31
 esBisiesto::Int->Bool
 esBisiesto x = ( mod x 400==0) || (mod x 4==0) && not (mod x 100==0)
 
-walk :: (Int, Int) -> [Step] -> (Int, Int)
-walk a [] = a
-walk (a,b) (x:xs)
-    | x == StepLeft = walk (a-1, b) xs
-    | x == StepRight = walk (a+1, b) xs
-    | x == StepUp = walk (a, b+1) xs
-    | x == StepDown = walk (a, b-1) xs
+-- walk :: (Int, Int) -> [Step] -> (Int, Int)
+-- walk a [] = a
+-- walk (a,b) (x:xs)
+--     | x == StepLeft = walk (a-1, b) xs
+--     | x == StepRight = walk (a+1, b) xs
+--     | x == StepUp = walk (a, b+1) xs
+--     | x == StepDown = walk (a, b-1) xs
 
+walk2 a [] = a
+walk2 (a,b) ((StepLeft n):xs) = walk2 (a-n, b) xs
+walk2 (a,b) ((StepRight n):xs) = walk2 (a+n, b) xs
+walk2 (a,b) ((StepUp n):xs) = walk2 (a, b+n) xs
+walk2 (a,b) ((StepDown n):xs) = walk2 (a, b-n) xs
+-- walk2 (a,b) ((x n):xs)
+--     | x == StepLeft = walk2 (a-n, b) xs
+--     | x == StepRight = walk2 (a+n, b) xs
+--     | x == StepUp = walk2 (a, b+n) xs
+--     | x == StepDown = walk2 (a, b-n) xs
 
 -- gameRPS2 (ax,az) (bx,bz) = compare (compareRPS ax az) (compareRPS bx bz)
 gameRPS a b = (compareRPS a b)
