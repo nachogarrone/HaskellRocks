@@ -75,7 +75,7 @@ toYards (Feet n) = (Yards (n/3))
 toYards (Inches n) = (Yards (n*0.0277778))
 toYards (Yards n) = (Yards n)
 
---addNum :: Numeric -> Numeric -> Numeric
+addNum :: Numeric -> Numeric -> Numeric
 addNum (IntNum x) (IntNum y) = IntNum (x + y)
 addNum (IntNum x) (DblNum y) = DblNum (fromIntegral x + y)
 addNum (DblNum x) (IntNum y) = DblNum (x + fromIntegral y)
