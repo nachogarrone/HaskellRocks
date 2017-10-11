@@ -16,5 +16,5 @@ emptyState = (\_ -> Nothing)
 
 evalAM :: [Inst] -> StackState -> StackState
 evalAM [] a = a
-evalAM [ConstTrue] ([], s) = ([Right True], s)
-evalAM [ConstFalse] ([], s) = ([Right False], s)
+evalAM (ConstTrue:xs) (stack, s) = evalAM xs ((Right True):stack, s)
+evalAM (ConstFalse:xs) (stack, s) = evalAM xs ((Right False):stack, s)

@@ -6,7 +6,7 @@ data BExp = ConsTrue | ConsFalse | CompEq AExp AExp | CompLtEq AExp AExp | LogNo
 
 data Stmt = Assign String AExp | Seq [Stmt] | IfThenElse BExp Stmt Stmt | WhileDo BExp Stmt deriving (Show)
 
-type State = (String -> Maybe Double)
+type State = String -> Maybe Double
 ---------------------------------------------------------------------------------------------------
 
 

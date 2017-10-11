@@ -5,7 +5,7 @@ import CodeAM
 
 main :: IO ()
 main = do
-    print (evalAM [ConstTrue] ([], emptyState))
+    print (evalAM [ConstFalse, ConstTrue] ([], emptyState))
 --     print (evalAExp (Num 4) emptyState)
 --     print (evalAExp (Add (Num 4) (Num 1)) emptyState)
 --     print (evalAExp (Mult (Num 4) (Num 1)) emptyState)
