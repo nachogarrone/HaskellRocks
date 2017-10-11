@@ -1,13 +1,29 @@
 module Main where
 
-import JuegoCartas
-
-
+import WhileLang
 
 main :: IO ()
 main = do
-    print (replaceBinTree (Leaf 2) 3 Empty)
-    print (replaceBinTree (Leaf 2) 2 Empty)
+    print (evalAExp (Num 4) emptyState)
+    print (evalAExp (Add (Num 4) (Num 1)) emptyState)
+    print (evalAExp (Mult (Num 4) (Num 1)) emptyState)
+    print (evalAExp (Sub (Num 4) (Num 1)) emptyState)
+    print (evalAExp (Div (Num 4) (Num 1)) emptyState)
+    print (evalAExp (Var "x") emptyState)
+--     print (show Empty)
+--     print ((Leaf 7))
+--     print (Feet 1.0 > Inches 12.0)
+--     print (Feet 2.0 > Inches 12.0)
+--     print (Feet 1.0 == Inches 12.0)
+--     print (Yards 1.0 == Feet 3.0)
+--     print (Inches 72.36 == Yards 2.01)
+--     print (RED == RED)
+--     print (RED == GREEN)
+--     print (addOrderedTree Empty 2)
+--     print (addOrderedTree (Leaf 2) 3)
+--     print (addOrderedTree (Leaf 2) 1)
+--     print (replaceBinTree (Leaf 2) 3 Empty)
+--     print (replaceBinTree (Leaf 2) 2 Empty)
 --     print (isOrderedTree (Node 2 (Leaf 1) (Leaf 3)))
 --     print (isOrderedTree (Node 1 (Leaf 2) (Leaf 3)))
 --     print (binTreeSearch (Node 2 (Leaf 1) (Leaf 3)) 1)

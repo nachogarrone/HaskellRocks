@@ -63,3 +63,12 @@ ascending (x:y:xs) = x <= y && ascending (y:xs)
 replaceBinTree Empty _ _ = Empty
 replaceBinTree (Leaf n) v new = if (n == v) then new else Leaf n
 replaceBinTree (Node n b1 b2) v new = if (n==v) then new else (if n<v then Node n (replaceBinTree b1 v new) b2 else Node n b1 (replaceBinTree b2 v new))
+
+
+addOrderedTree Empty v = (Leaf v)
+addOrderedTree (Leaf n) v
+    | v <= n = (Node n (Leaf v) Empty)
+    | otherwise = (Node n Empty (Leaf v))
+addOrderedTree (Node n b1 b2) v
+    | v <= n = Node n (addOrderedTree b1 v) b2
+    | otherwise = Node n b1 (addOrderedTree b2 v)
