@@ -1,15 +1,17 @@
 module Main where
 
-import WhileLang
+import Text.Show.Functions
+import CodeAM
 
 main :: IO ()
 main = do
-    print (evalAExp (Num 4) emptyState)
-    print (evalAExp (Add (Num 4) (Num 1)) emptyState)
-    print (evalAExp (Mult (Num 4) (Num 1)) emptyState)
-    print (evalAExp (Sub (Num 4) (Num 1)) emptyState)
-    print (evalAExp (Div (Num 4) (Num 1)) emptyState)
-    print (evalAExp (Var "x") emptyState)
+    print (evalAM [ConstTrue] ([], emptyState))
+--     print (evalAExp (Num 4) emptyState)
+--     print (evalAExp (Add (Num 4) (Num 1)) emptyState)
+--     print (evalAExp (Mult (Num 4) (Num 1)) emptyState)
+--     print (evalAExp (Sub (Num 4) (Num 1)) emptyState)
+--     print (evalAExp (Div (Num 4) (Num 1)) emptyState)
+--     print (evalAExp (Var "x") emptyState)
 --     print (show Empty)
 --     print ((Leaf 7))
 --     print (Feet 1.0 > Inches 12.0)
