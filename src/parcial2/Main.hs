@@ -1,12 +1,13 @@
 module Main where
 
 import Text.Show.Functions
-import CodeAM
+import CompileWhileAM
 
 main :: IO ()
 main = do
-    print (evalAM [(Push 5), (Push 4), (Store "x"), (Fetch "x")] ([], emptyState))
-    print (evalAM [ConstFalse, ConstTrue] ([], emptyState))
+    print (compileAExp (Num 5))
+--     print (evalAM [(Push 5), (Push 4), (Store "x"), (Fetch "x")] ([], emptyState))
+--     print (evalAM [ConstFalse, ConstTrue] ([], emptyState))
 --     print (evalAExp (Num 4) emptyState)
 --     print (evalAExp (Add (Num 4) (Num 1)) emptyState)
 --     print (evalAExp (Mult (Num 4) (Num 1)) emptyState)
