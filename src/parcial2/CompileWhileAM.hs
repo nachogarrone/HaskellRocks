@@ -19,5 +19,7 @@ type StackState = (Stack, State)
 
 emptyState = (\_ -> Nothing)
 
+compileAExp:: AExp -> [Inst]
 compileAExp (Num n) = [Push n]
 compileAExp (Var s) = [Fetch s]
+compileAExp (Add a b) = (compileAExp a) ++ (compileAExp b) ++ [ADD]
