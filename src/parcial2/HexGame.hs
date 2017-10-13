@@ -13,7 +13,7 @@ type HexMove = (Int, Int)
 -----------------------------------------------------------
 
 activePlayer :: HexBoard -> Maybe HexPlayer
-activePlayer board = if (mod (sum (map length (map filter (\x -> x == 'e') board))) 2 == 0) then 'W' else 'B'
+activePlayer board = if (mod (sum (map length (map filter (== 'e') board))) 2 == 0) then 'W' else 'B'
 
 -- filtramos las n
 -- aplicamos map para obtener todas las listas de fitler
