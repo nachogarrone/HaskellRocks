@@ -21,3 +21,6 @@ emptyState = (\_ -> Nothing)
 
 compileAExp (Num n) = [Push n]
 compileAExp (Var s) = [Fetch s]
+
+compileBExp (ConsTrue) = [ConstTrue2]
+compileBExp (ConsFalse) = [ConstFalse2]
