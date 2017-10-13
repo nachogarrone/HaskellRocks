@@ -13,7 +13,12 @@ type HexMove = (Int, Int)
 -----------------------------------------------------------
 
 activePlayer :: HexBoard -> Maybe HexPlayer
+activePlayer board = sum (map length (map filter (\x -> x == 'e') board))
 
+-- filtramos las n
+-- aplicamos map para obtener todas las listas de fitler
+-- aplicamos map para obtener los largos de todas las listas
+-- sumamos los length
 
 -----------------------------------------------------------
 
@@ -25,8 +30,8 @@ isFinished board = (winner board)
 
 moves :: HexBoard -> HexPlayer -> [HexMove]
 moves board player
-    | player /= activePlayer board = []
-    | otherwise =
+    | player /= (activePlayer board) = []
+    | otherwise = [(x,y) | x <- 0...10, y <- 0...10, (board !! x) !! y == 'e']
 
 -----------------------------------------------------------
 
@@ -41,7 +46,7 @@ winner :: HexBoard -> Maybe HexPlayer
 -----------------------------------------------------------
 
 startBoard :: HexBoard
-startBoard = [["nnn"],["nnn"],["nnn"]]
+startBoard = [["eeeeeeeeeee"],["eeeeeeeeeee"],["eeeeeeeeeee"],["eeeeeeeeeee"],["eeeeeeeeeee"],["eeeeeeeeeee"],["eeeeeeeeeee"],["eeeeeeeeeee"],["eeeeeeeeeee"],["eeeeeeeeeee"],["eeeeeeeeeee"]]
 
 -----------------------------------------------------------
 
