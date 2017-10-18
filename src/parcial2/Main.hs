@@ -4,7 +4,7 @@ import Monadass
 
 main :: IO ()
 main = do
-    x <- readN 2
+    x <- readN 5
     print x
 --     print (compileAExp (Num 5))
 --     print (compileAExp (Add (Num 5) (Num 6)))
