@@ -9,3 +9,10 @@ readN n
         return (x:res)
     | otherwise = error "n no puede ser un número negativo"
 
+readMany = do
+    x <- getLine
+    if (length x > 0) then do
+        res <- readMany
+        return (x:res)
+    else return []
+

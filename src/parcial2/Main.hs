@@ -4,8 +4,10 @@ import Monadass
 
 main :: IO ()
 main = do
-    x <- readN 5
+    x <- readMany
     print x
+--     x <- readN 5
+--     print x
 --     print (compileAExp (Num 5))
 --     print (compileAExp (Add (Num 5) (Num 6)))
 --     print (evalAM [(Push 5), (Push 4), (Store "x"), (Fetch "x")] ([], emptyState))
