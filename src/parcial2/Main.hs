@@ -2,9 +2,11 @@ module Main where
 
 import GuessGame
 
+validChars = "ab"
+
 main :: IO ()
 main = do
-    x <- (guessGame 2 "ab" 2 (\_-> return "aa"))
+    x <- (guessGame 2 validChars 200 (\_-> randomStr 2 validChars))
     print x
 --     x <- readN 5
 --     print x

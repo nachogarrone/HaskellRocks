@@ -13,6 +13,7 @@ guessGame len chars tries player = do
    str <- randomStr len chars
    _guessGame str tries Nothing player
 
+
 _guessGame :: String -> Int -> Maybe [Int] -> Player
    -> IO Int
 _guessGame s t x p =
