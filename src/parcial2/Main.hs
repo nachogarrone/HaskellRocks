@@ -1,10 +1,10 @@
 module Main where
 
-import Monadass
+import GuessGame
 
 main :: IO ()
 main = do
-    x <- readMany
+    x <- (guessGame 2 "ab" 2 (\_-> return "aa"))
     print x
 --     x <- readN 5
 --     print x
