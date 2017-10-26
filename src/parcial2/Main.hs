@@ -6,7 +6,7 @@ validChars = "ab"
 
 main :: IO ()
 main = do
-    x <- (guessGame 2 validChars 200 (\_-> randomStr 2 validChars))
+    x <- (guessGame 2 validChars 200 (randomPlayer 2 validChars))
     print x
 --     x <- readN 5
 --     print x

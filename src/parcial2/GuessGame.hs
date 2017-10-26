@@ -8,8 +8,8 @@ type Player = Maybe [Int] -> IO String
 
 bannedChars = newIORef ()
 
--- randomPlayer :: Int -> String -> Player
--- randomPlayer n s _ = randomStr s n
+randomPlayer :: Int -> String -> Player
+randomPlayer n s _ = randomStr n s
 
 -- smartPlayer
 
@@ -17,6 +17,7 @@ consolePlayer Nothing = getLine
 consolePlayer (Just chk) = do
    putStrLn chk
    getLine
+
 guessGame :: Int -> String -> Int -> Player -> IO Int
 guessGame len chars tries player = do
    str <- randomStr len chars
@@ -45,5 +46,5 @@ checkStr txt ln = zipWith f txt ln
 
 randomStr :: Int -> String -> IO String
 randomStr n chars = do
-    g <- newStdGen
-    return (take n [chars !! i | i <- randomRs (0, (length chars) -1) g])
+  g <- newStdGen
+  return $ take n [chars !! i | i <- randomRs (0, length chars - 1) g]
