@@ -11,7 +11,8 @@ bannedChars = newIORef ()
 randomPlayer :: Int -> String -> Player
 randomPlayer n s _ = randomStr n s
 
--- smartPlayer
+smartPlayer :: Int -> String -> Player
+smartPlayer n s _ = randomStr n s
 
 consolePlayer Nothing = getLine
 consolePlayer (Just chk) = do
