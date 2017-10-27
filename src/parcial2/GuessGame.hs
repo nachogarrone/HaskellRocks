@@ -11,22 +11,17 @@ type Player = Maybe [Int] -> IO String
 randomPlayer :: Int -> String -> Player
 randomPlayer n s _ = randomStr n s
 
-smartPlayer :: Int -> String -> Player
-smartPlayer n s b = do
-    gameState <- newIORef ("","")
-    _smartPlayer n s b gameState
+smartPlayer :: Int -> String -> IO Player
+smartPlayer n s = do
+    gameState <- newIORef ("",s)
+    return (_smartPlayer n gameState)
 
-_smartPlayer n s b gameState = do
+_smartPlayer n gameState p = do
+    (_,letters) <- readIORef gameState
+    newGuess <- randomStr n letters
+    writeIORef gameState (newGuess,letters)
     (readIORef gameState) >>= print
-    state <- (readIORef gameState)
---     print state
-
-    xx <- randomStr n s
---     compareList xx (snd state)
---     print b
-    writeIORef gameState (xx,s)
-    (readIORef gameState) >>= print
-    return xx
+    return newGuess
 
 compareList _ [] = return []
 compareList (s:string) (r:results) = do
