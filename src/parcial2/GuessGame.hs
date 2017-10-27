@@ -6,17 +6,33 @@ import Data.IORef
 
 type Player = Maybe [Int] -> IO String
 
-bannedChars = newIORef ()
+
 
 randomPlayer :: Int -> String -> Player
 randomPlayer n s _ = randomStr n s
 
 smartPlayer :: Int -> String -> Player
 smartPlayer n s b = do
---     writeIORef bannedChars s
-    print b
-    randomStr n s
-smartPlayer n s _ = randomStr n s
+    gameState <- newIORef ("","")
+    _smartPlayer n s b gameState
+
+_smartPlayer n s b gameState = do
+    (readIORef gameState) >>= print
+    state <- (readIORef gameState)
+--     print state
+
+    xx <- randomStr n s
+--     compareList xx (snd state)
+--     print b
+    writeIORef gameState (xx,s)
+    (readIORef gameState) >>= print
+    return xx
+
+compareList _ [] = return []
+compareList (s:string) (r:results) = do
+    if r == 0 then do s else print "no sacar nada"
+    compareList string results
+
 
 consolePlayer Nothing = getLine
 consolePlayer (Just chk) = do
@@ -36,11 +52,6 @@ _guessGame s t x p = if t <= 0 || x == Just (take (length s) (repeat 2))
       _guessGame s (t - 1) (Just (checkStr s m)) p
 
 
--- compareList _ [] = return []
--- compareList (s:string) (r:results) = do
---     if r == 0 then do
---         writeIORef bannedChars s else print "no sacar nada"
---     compareList string results
 
 
 
