@@ -12,6 +12,10 @@ randomPlayer :: Int -> String -> Player
 randomPlayer n s _ = randomStr n s
 
 smartPlayer :: Int -> String -> Player
+smartPlayer n s b = do
+--     writeIORef bannedChars s
+    print b
+    randomStr n s
 smartPlayer n s _ = randomStr n s
 
 consolePlayer Nothing = getLine
