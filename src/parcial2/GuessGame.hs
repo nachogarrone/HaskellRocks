@@ -16,17 +16,25 @@ smartPlayer n s = do
     gameState <- newIORef ("",s)
     return (_smartPlayer n gameState)
 
+_smartPlayer :: Int -> IORef (String, String) -> Maybe [Int] -> IO String
 _smartPlayer n gameState p = do
-    (_,letters) <- readIORef gameState
-    newGuess <- randomStr n letters
-    writeIORef gameState (newGuess,letters)
-    (readIORef gameState) >>= print
+    (lastGuess,letters) <- readIORef gameState
+--  sacar las letras de letters que nos dieron res=0
+    let newLetters = compareList lastGuess p
+    newGuess <- randomStr n newLetters
+    writeIORef gameState (newGuess,newLetters)
+    print lastGuess
+    print p
+    print newLetters
+--     (test return lastGuess p)
+--     print lastGuess
+--     print newGuess
+--     print p
     return newGuess
 
-compareList _ [] = return []
-compareList (s:string) (r:results) = do
-    if r == 0 then do s else print "no sacar nada"
-    compareList string results
+compareList :: String -> Maybe [Int] -> String
+compareList (s:string) (Just (r:results)) = if r /= 0 then (s:compareList string (Just results)) else (compareList string (Just results))
+compareList _ _ = []
 
 
 consolePlayer Nothing = getLine
