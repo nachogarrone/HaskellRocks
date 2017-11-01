@@ -1,14 +1,19 @@
 module Main where
 
-import GuessGame
+import Lambda
 
 validChars = "ab"
 
 main :: IO ()
 main = do
-    f <- (smartPlayer 2 validChars)
-    x <- (guessGame 2 validChars 200 (f))
-    print x
+    print (freevars (Var 0))
+    print (freevars (Apl (Var 0) (Var 0)))
+    print (freevars (Apl (Var 0) (Var 1)))
+    print (freevars (Abs 0 (Var 0)))
+    print (freevars (Abs 0 (Var 1)))
+--     f <- (smartPlayer 2 validChars)
+--     x <- (guessGame 2 validChars 200 (f))
+--     print x
 --     x <- readN 5
 --     print x
 --     print (compileAExp (Num 5))
