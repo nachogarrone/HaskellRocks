@@ -14,6 +14,7 @@ freevars (Var x) = [x]
 freevars (Apl e f) = union (freevars e) (freevars f)
 freevars (Abs x e) = delete x (freevars e)
 
+
 substitution :: Lambda -> Int -> Lambda -> Lambda
 
 substitution e@(Var x) y r
@@ -26,3 +27,14 @@ substitution (Apl e f) x r =
 substitution e@(Abs x f) y r
     | x == y = e
     | otherwise = (Abs x (substitution f y r))
+
+
+betaRedexes :: Lambda -> [Lambda]
+
+betaRedexes e@(Apl (Abs _ m) n) =
+    e:((betaRedexes m) ++ (betaRedexes n))
+betaRedexes (Apl m n) =
+    (betaRedexes m) ++ (betaRedexes n)
+betaRedexes (Abs _ m) = betaRedexes m
+betaRedexes _ = []
+

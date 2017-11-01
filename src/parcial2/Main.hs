@@ -3,14 +3,21 @@ module Main where
 import Lambda
 
 validChars = "ab"
+var0 = Var 0
+var1 = Var 1
+abs0 = Abs 0 var0
+redex1 = Apl abs0 var1
+redex2 = Apl (Abs 1 redex1) var0
 
 main :: IO ()
 main = do
-    print (freevars (Var 0))
-    print (freevars (Apl (Var 0) (Var 0)))
-    print (freevars (Apl (Var 0) (Var 1)))
-    print (freevars (Abs 0 (Var 0)))
-    print (freevars (Abs 0 (Var 1)))
+    print(betaRedexes var0)
+    print(betaRedexes redex1)
+--     print (freevars (Var 0))
+--     print (freevars (Apl (Var 0) (Var 0)))
+--     print (freevars (Apl (Var 0) (Var 1)))
+--     print (freevars (Abs 0 (Var 0)))
+--     print (freevars (Abs 0 (Var 1)))
 --     f <- (smartPlayer 2 validChars)
 --     x <- (guessGame 2 validChars 200 (f))
 --     print x
