@@ -38,3 +38,4 @@ betaRedexes (Apl m n) =
 betaRedexes (Abs _ m) = betaRedexes m
 betaRedexes _ = []
 
+noRed :: Lambda -> Lambda
