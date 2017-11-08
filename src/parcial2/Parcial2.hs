@@ -7,7 +7,8 @@ readOneOf :: [String] -> IO (Maybe String)
 readOneOf [] = error "Lista vacia!!"
 readOneOf p = do
    line <- getLine
-   if elem line p then return (Just line) else readOneOf p
+   if elem line p then return (Just line) else
+    if line == "" then return Nothing else readOneOf p
 
 
 
