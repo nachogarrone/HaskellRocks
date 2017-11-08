@@ -7,6 +7,8 @@ import Data.Maybe
 -- Definir una función obtenga el número de línea de un valor de tipo Viaje, retornando Nothing si éste no aplica.
 -- nroLinea :: Viaje -> Maybe String
 
+-- data Tipo = Caso1 Tipo Int | Caso2 Int Tipo
+
 data Viaje = Camina | Auto | Omnibus String deriving (Eq, Show)
 
 nroLinea :: Viaje -> Maybe String
@@ -22,13 +24,20 @@ nroLinea _ = Nothing
 -- >
 -- > stop
 -- = ["uno", "dos", ""]
-readUntil:: String -> IO [String]
-readUntil p = do
-   line <- getLine
-   if(line==p)then(return[])else(do
-                                   lines <- readUntil p
-                                   return (line:lines))
+-- readUntil:: String -> IO [String]
+-- readUntil p = do
+--    line <- getLine
+--    if(line==p)then(return[])else(do
+--                                    lines <- readUntil p
+--                                    return (line:lines))
 
+
+-- readMany :: IO [String]
+-- readMany = do
+--   linea <- getLine
+--   if linea == "" then return [] else do
+--     liness <- readMany
+--     return (linea:liness)
 
 
 data BinTree a = Node a (BinTree a) (BinTree a) | Leaf a | Empty deriving (Eq, Show)

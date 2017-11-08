@@ -20,6 +20,13 @@ readMany = do
     liness <- readMany
     return (linea:liness)
 
+-- readMany :: IO [String]
+-- readMany = do
+--    line <- getLine
+--    if (null line) then return [] else
+--       lines <- readMany
+--       return (line:lines)
+
 randomStr :: Int -> String -> IO String
 randomStr n chars = do
   g <- newStdGen
