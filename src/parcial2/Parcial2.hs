@@ -3,11 +3,12 @@ module Parcial2 where
 import Data.Maybe
 
 
-readOneOf :: [String] -> IO (Maybe String)
+readOneOf :: (Show a) => [a] -> IO (Maybe a)
 readOneOf [] = error "Lista vacia!!"
 readOneOf p = do
    line <- getLine
-   if elem line p then return (Just line) else
+   let values = filter (\x -> (show x) == line) p
+   if (length values > 0) then return (Just (head values)) else
     if line == "" then return Nothing else readOneOf p
 
 
