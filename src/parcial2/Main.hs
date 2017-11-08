@@ -7,9 +7,12 @@ import Prepa
 
 main :: IO ()
 main = do
-    print(fromJust(nroLinea (Omnibus "105")))
-    print(nroLinea Auto)
-    print(nroLinea Camina)
+    print (height (Leaf 2))
+    print (height ((Node 2 (Leaf 1) (Leaf 3))))
+    print (height ((Node 2 (Node 1 (Leaf 1) (Empty)) (Leaf 3))))
+--     print(fromJust(nroLinea (Omnibus "105")))
+--     print(nroLinea Auto)
+--     print(nroLinea Camina)
 --    print(betaRedexes var0)
 --    print(betaRedexes redex1)
 --     print (freevars (Var 0))
