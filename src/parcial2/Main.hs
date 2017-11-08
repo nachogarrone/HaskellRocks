@@ -1,18 +1,17 @@
 module Main where
 
-import Lambda
+import Data.Maybe
 
-validChars = "ab"
-var0 = Var 0
-var1 = Var 1
-abs0 = Abs 0 var0
-redex1 = Apl abs0 var1
-redex2 = Apl (Abs 1 redex1) var0
+import Prepa
+
 
 main :: IO ()
 main = do
-    print(betaRedexes var0)
-    print(betaRedexes redex1)
+    print(fromJust(nroLinea (Omnibus "105")))
+    print(nroLinea Auto)
+    print(nroLinea Camina)
+--    print(betaRedexes var0)
+--    print(betaRedexes redex1)
 --     print (freevars (Var 0))
 --     print (freevars (Apl (Var 0) (Var 0)))
 --     print (freevars (Apl (Var 0) (Var 1)))
