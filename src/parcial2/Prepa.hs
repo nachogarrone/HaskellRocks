@@ -28,3 +28,15 @@ readUntil p = do
    if(line==p)then(return[])else(do
                                    lines <- readUntil p
                                    return (line:lines))
+
+
+
+data BinTree a = Node a (BinTree a) (BinTree a) | Leaf a | Empty deriving (Eq, Show)
+
+-- Definir una función que calcule la altura de un árbol dado. Es decir la máxima distancia de la raíz a las hojas.
+-- height :: BinTree a -> Int
+
+height :: BinTree a -> Int
+height (Leaf n) = 1
+height (Empty) = 0
+height (Node n b1 b2) = [n] ++ (preorder b1) ++ (preorder b2)
