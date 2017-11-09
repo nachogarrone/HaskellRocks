@@ -24,12 +24,13 @@ nroLinea _ = Nothing
 -- >
 -- > stop
 -- = ["uno", "dos", ""]
--- readUntil:: String -> IO [String]
--- readUntil p = do
---    line <- getLine
---    if(line==p)then(return[])else(do
---                                    lines <- readUntil p
---                                    return (line:lines))
+readUntil:: String -> IO [String]
+readUntil "" = error "Palabra vacia!!"
+readUntil p = do
+   line <- getLine
+   if(line==p)then(return[])else(do
+                                   lines <- readUntil p
+                                   return (line:lines))
 
 
 -- readMany :: IO [String]
