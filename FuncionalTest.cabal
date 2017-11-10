@@ -28,3 +28,12 @@ executable FuncionalTest2
   build-depends:       base >=4.9 && <4.10, random
   hs-source-dirs:       src/parcial2
   default-language:     Haskell2010
+
+
+executable FuncionalTest3
+  main-is:              Main.hs
+  -- other-modules:
+  -- other-extensions:
+  build-depends:       base >=4.9 && <4.10, random
+  hs-source-dirs:       src/obligatorio
+  default-language:     Haskell2010
