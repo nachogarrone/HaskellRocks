@@ -1,7 +1,7 @@
 module Main where
 
 import Contingency
-import Data.Random.Extras
+
 
 emptyBoard = [Vacia,Vacia,Vacia,Vacia,Vacia,
               Vacia,Vacia,Vacia,Vacia,Vacia,
@@ -25,5 +25,12 @@ operators = [AND2,AND2,AND2,AND2,AND2,AND2, -- 6x AND2
 main :: IO ()
 main = do
 --     (putStrLn (showBoard (ContingencyGame emptyBoard constants operators)))
-    x <- return (Just (choiceExtract operators))
-    print (show x)
+    print operators
+    c1 <- pick operators
+    let newOperators = removeItem c1 operators
+    print newOperators
+    c2 <- pick newOperators
+    removeItem c2 return operators
+--     print operators
+
+    print c1

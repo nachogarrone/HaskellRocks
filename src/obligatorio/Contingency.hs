@@ -7,6 +7,8 @@
 module Contingency where
 
 import Data.Maybe
+import System.Random (randomRIO)
+
 
 
 -- Game logic stub ---------------------------------------------------------------------------------
@@ -14,7 +16,7 @@ import Data.Maybe
 type Tablero = [Casilla]
 type Constantes = [Constante]
 type Operadores = [Operador]
-data Operador = AND2 | AND3 | OR2 | OR3 | XOR | IFF | IF | NOT
+data Operador = AND2 | AND3 | OR2 | OR3 | XOR | IFF | IF | NOT deriving (Eq, Show, Enum)
 data Casilla = Casilla Constante | Operador Posicion | Vacia
 
 instance (Show Casilla) where
@@ -80,6 +82,11 @@ consoleAgent _ _ = error "consoleAgent has not been implemented!"
 randomAgent :: ContingencyGame -> ContingencyPlayer -> IO ContingencyAction
 randomAgent _ _ = error "randomAgent has not been implemented!"
 
+buildBoard = do
+    c1 <- pick operators
+    let newOperators = removeItem c1 operators
+
+
 runMatch :: (ContingencyPlayer, ContingencyPlayer) -> ContingencyGame -> IO (Int, Int)
 runMatch players@(agTrue, agFalse) g = do
   putStrLn (showBoard g)
@@ -101,3 +108,10 @@ runOnConsole = do
 
 
 -- AUXILIARES
+pick :: [a] -> IO a
+pick xs = fmap (xs !!) $ randomRIO (0, length xs - 1)
+
+removeItem _ [] = []
+removeItem x (y:ys)
+    | x == y    = ys
+    | otherwise = y : removeItem x ys
