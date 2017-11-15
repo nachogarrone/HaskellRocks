@@ -8,6 +8,7 @@ module Contingency where
 
 import Data.Maybe
 
+
 -- Game logic stub ---------------------------------------------------------------------------------
 
 type Tablero = [Casilla]
@@ -18,6 +19,7 @@ data Casilla = Casilla Constante | Operador Posicion | Vacia
 
 instance (Show Casilla) where
     show Vacia = "[ ]"
+    show (Casilla (Constante v e)) = if e then if v then "[ CT ]" else "[ CF ]" else "[ C? ]"
 
 data Constante = Constante Valor Estado
 
@@ -57,9 +59,9 @@ showBoard (ContingencyGame tablero _ _)  = auxTabl tablero 0
 --showBoard _ = error "showBoard has not been implemented!" --TODO
 
 auxTabl :: Tablero -> Int -> String
-auxTabl [x] 6 = show x ++ "\n"
+auxTabl [x] 4 = show x ++ "\n"
 auxTabl [x] _ = show x ++ "\n"
-auxTabl (x:xs) 6 = (show x ++ "\n") ++ auxTabl xs (0)
+auxTabl (x:xs) 4 = (show x ++ "\n") ++ auxTabl xs (0)
 auxTabl (x:xs) n = show x ++ auxTabl xs (n+1)
 
 
@@ -95,3 +97,7 @@ runOnConsole :: IO (Int, Int)
 runOnConsole = do
   board <- beginning
   runMatch (PlayerTrue, PlayerFalse) board
+
+
+
+-- AUXILIARES
