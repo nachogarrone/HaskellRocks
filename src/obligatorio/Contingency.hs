@@ -10,8 +10,24 @@ import Data.Maybe
 
 -- Game logic stub ---------------------------------------------------------------------------------
 
+type Tablero = [Casilla]
+type Constantes = [Constante]
+type Operadores = [Operador]
+data Operador = AND2 | AND3 | OR2 | OR3 | NOT
+data Casilla = Casilla Constante | Operador Posicion | Vacia
+
+instance (Show Casilla) where
+    show Vacia = "[ ]"
+
+data Constante = Constante Valor Estado
+
+type Valor = Bool
+type Estado = Bool
+
+data Posicion = Arriba | Abajo | Izquierda | Derecha
+
 data ContingencyPlayer = PlayerTrue | PlayerFalse deriving (Eq, Show, Enum)
-data ContingencyGame
+data ContingencyGame = ContingencyGame Tablero Constantes Operadores
 data ContingencyAction
 
 -- OESTE
@@ -37,7 +53,15 @@ score :: ContingencyGame -> ContingencyPlayer -> Int
 score _ _ = error "score has not been implemented!" --TODO
 
 showBoard :: ContingencyGame -> String
-showBoard _ = error "showBoard has not been implemented!" --TODO
+showBoard (ContingencyGame tablero _ _)  = auxTabl tablero 0
+--showBoard _ = error "showBoard has not been implemented!" --TODO
+
+auxTabl :: Tablero -> Int -> String
+auxTabl [x] 6 = show x ++ "\n"
+auxTabl [x] _ = show x ++ "\n"
+auxTabl (x:xs) 6 = (show x ++ "\n") ++ auxTabl xs (0)
+auxTabl (x:xs) n = show x ++ auxTabl xs (n+1)
+
 
 showAction :: ContingencyAction -> String
 showAction _ = error "showAction has not been implemented!" --TODO
@@ -57,12 +81,12 @@ randomAgent _ _ = error "randomAgent has not been implemented!"
 runMatch :: (ContingencyPlayer, ContingencyPlayer) -> ContingencyGame -> IO (Int, Int)
 runMatch players@(agTrue, agFalse) g = do
   putStrLn (showBoard g);
-  let active = fromJust (activePlayer g);
-  nextAction <- (consoleAgent g active);
-  nextBoard <- (nextState g active nextAction);
   if
     (isFinished g)
   then
+    let active = fromJust (activePlayer g);
+    nextAction <- (consoleAgent g active);
+    nextBoard <- (nextState g active nextAction);
     return (score g agTrue, score g agFalse)
   else
     runMatch players nextBoard
