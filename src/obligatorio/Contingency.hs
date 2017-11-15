@@ -82,9 +82,9 @@ consoleAgent _ _ = error "consoleAgent has not been implemented!"
 randomAgent :: ContingencyGame -> ContingencyPlayer -> IO ContingencyAction
 randomAgent _ _ = error "randomAgent has not been implemented!"
 
-buildBoard = do
-    c1 <- pick operators
-    let newOperators = removeItem c1 operators
+-- buildBoard = do
+--     c1 <- pick operators
+--     let newOperators = removeItem c1 operators
 
 
 runMatch :: (ContingencyPlayer, ContingencyPlayer) -> ContingencyGame -> IO (Int, Int)

@@ -29,8 +29,5 @@ main = do
     c1 <- pick operators
     let newOperators = removeItem c1 operators
     print newOperators
-    c2 <- pick newOperators
-    removeItem c2 return operators
 --     print operators
-
     print c1
