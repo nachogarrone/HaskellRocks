@@ -80,15 +80,15 @@ randomAgent _ _ = error "randomAgent has not been implemented!"
 
 runMatch :: (ContingencyPlayer, ContingencyPlayer) -> ContingencyGame -> IO (Int, Int)
 runMatch players@(agTrue, agFalse) g = do
-  putStrLn (showBoard g);
+  putStrLn (showBoard g)
   if
     (isFinished g)
   then
-    let active = fromJust (activePlayer g);
-    nextAction <- (consoleAgent g active);
-    nextBoard <- (nextState g active nextAction);
     return (score g agTrue, score g agFalse)
-  else
+  else do
+    let active = fromJust (activePlayer g)
+    nextAction <- (consoleAgent g active)
+    nextBoard <- (nextState g active nextAction)
     runMatch players nextBoard
 
 runOnConsole :: IO (Int, Int)
