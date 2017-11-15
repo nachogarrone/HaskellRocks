@@ -13,7 +13,7 @@ import Data.Maybe
 type Tablero = [Casilla]
 type Constantes = [Constante]
 type Operadores = [Operador]
-data Operador = AND2 | AND3 | OR2 | OR3 | NOT
+data Operador = AND2 | AND3 | OR2 | OR3 | XOR | IFF | IF | NOT
 data Casilla = Casilla Constante | Operador Posicion | Vacia
 
 instance (Show Casilla) where
