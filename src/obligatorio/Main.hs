@@ -25,9 +25,16 @@ operators = [AND2,AND2,AND2,AND2,AND2,AND2, -- 6x AND2
 main :: IO ()
 main = do
 --     (putStrLn (showBoard (ContingencyGame emptyBoard constants operators)))
-    print operators
-    c1 <- pick operators
-    let newOperators = removeItem c1 operators
-    print newOperators
+    a1 <- pick constants
+    print a1
+--     (putStrLn (showBoard (ContingencyGame (insertAt emptyBoard a1 0) constants operators)))
+
 --     print operators
-    print c1
+--     c1 <- pick operators
+--     let newOperators = removeItem c1 operators
+--     print newOperators
+--     c2 <- pick newOperators
+--     removeItem c2 return operators
+--     print operators
+
+--     print c1

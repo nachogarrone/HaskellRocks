@@ -24,6 +24,9 @@ instance (Show Casilla) where
     show (Casilla (Constante v e)) = if e then if v then "[ CT ]" else "[ CF ]" else "[ C? ]"
 
 data Constante = Constante Valor Estado
+instance (Show Constante) where
+    show (Constante v e) = show v
+
 
 type Valor = Bool
 type Estado = Bool
@@ -83,8 +86,12 @@ randomAgent :: ContingencyGame -> ContingencyPlayer -> IO ContingencyAction
 randomAgent _ _ = error "randomAgent has not been implemented!"
 
 -- buildBoard = do
---     c1 <- pick operators
---     let newOperators = removeItem c1 operators
+--     a1 <- pick operators
+--     auxTabl (insertAt emptyBoard a1 0)
+--     let newOperators = removeItem a1 operators
+--     a5 <- pick operators
+--     let newOperators = removeItem a5 operators
+
 
 
 runMatch :: (ContingencyPlayer, ContingencyPlayer) -> ContingencyGame -> IO (Int, Int)
@@ -115,3 +122,9 @@ removeItem _ [] = []
 removeItem x (y:ys)
     | x == y    = ys
     | otherwise = y : removeItem x ys
+
+-- insertAt::[a]->a->Int->[a]
+insertAt l y i
+    | ((length l) == 0) && (i == 0) = [y]
+    | (length l) < i = error "index out of range"
+    | otherwise = (take i l)++[y]++(drop i l)
