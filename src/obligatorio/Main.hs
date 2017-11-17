@@ -2,13 +2,6 @@ module Main where
 
 import Contingency
 
-
-emptyBoard = [Vacia,Vacia,Vacia,Vacia,Vacia,
-              Vacia,Vacia,Vacia,Vacia,Vacia,
-              Vacia,Vacia,Vacia,Vacia,Vacia,
-              Vacia,Vacia,Vacia,Vacia,Vacia,
-              Vacia,Vacia,Vacia,Vacia,Vacia]
-
 constants = [(Constante True False),(Constante True False),(Constante True False),(Constante True False),
              (Constante False False),(Constante False False),(Constante False False),(Constante False False)]
 
@@ -24,17 +17,5 @@ operators = [AND2,AND2,AND2,AND2,AND2,AND2, -- 6x AND2
 
 main :: IO ()
 main = do
---     (putStrLn (showBoard (ContingencyGame emptyBoard constants operators)))
-    a1 <- pick constants
-    print a1
---     (putStrLn (showBoard (ContingencyGame (insertAt emptyBoard a1 0) constants operators)))
-
---     print operators
---     c1 <- pick operators
---     let newOperators = removeItem c1 operators
---     print newOperators
---     c2 <- pick newOperators
---     removeItem c2 return operators
---     print operators
-
---     print c1
+    board <- buildBoard constants
+    print board

@@ -7,7 +7,7 @@
 module Contingency where
 
 import Data.Maybe
-import System.Random (randomRIO)
+import System.Random
 
 
 
@@ -23,7 +23,7 @@ instance (Show Casilla) where
     show Vacia = "[ ]"
     show (Casilla (Constante v e)) = if e then if v then "[ CT ]" else "[ CF ]" else "[ C? ]"
 
-data Constante = Constante Valor Estado
+data Constante = Constante Valor Estado deriving (Eq)
 instance (Show Constante) where
     show (Constante v e) = show v
 
@@ -85,14 +85,18 @@ consoleAgent _ _ = error "consoleAgent has not been implemented!"
 randomAgent :: ContingencyGame -> ContingencyPlayer -> IO ContingencyAction
 randomAgent _ _ = error "randomAgent has not been implemented!"
 
--- buildBoard = do
---     a1 <- pick operators
---     auxTabl (insertAt emptyBoard a1 0)
---     let newOperators = removeItem a1 operators
---     a5 <- pick operators
---     let newOperators = removeItem a5 operators
 
+--  a1, a5, b2, b4, d2, d4, e1 y e5.
+positions = "1000101010000000101010001"
+buildBoard constants = do
+    shuffConstants <- (shuffle constants)
+    return (mapPosition positions shuffConstants 0)
 
+mapPosition [] _ _ = []
+mapPosition (x:xs) c i
+    | x == '1' = ((Casilla (c !! i)) : (mapPosition xs c (i+1)))
+    | x == '0' = (Vacia: (mapPosition xs c i))
+    | otherwise = error("Wrong cell detected")
 
 runMatch :: (ContingencyPlayer, ContingencyPlayer) -> ContingencyGame -> IO (Int, Int)
 runMatch players@(agTrue, agFalse) g = do
@@ -118,12 +122,17 @@ runOnConsole = do
 pick :: [a] -> IO a
 pick xs = fmap (xs !!) $ randomRIO (0, length xs - 1)
 
+shuffle :: [a] -> IO [a]
+shuffle [] = return []
+shuffle xs = do randomPosition <- getStdRandom (randomR (0, length xs - 1))
+                let (left, (a:right)) = splitAt randomPosition xs
+                fmap (a:) (shuffle (left ++ right))
+
 removeItem _ [] = []
 removeItem x (y:ys)
     | x == y    = ys
     | otherwise = y : removeItem x ys
 
--- insertAt::[a]->a->Int->[a]
 insertAt l y i
     | ((length l) == 0) && (i == 0) = [y]
     | (length l) < i = error "index out of range"
