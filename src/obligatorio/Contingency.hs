@@ -30,7 +30,7 @@ type Tablero = [Casilla]
 type Constantes = [Constante]
 type Operadores = [Operador]
 data Operador = AND2 | AND3 | OR2 | OR3 | XOR | IFF | IF | NOT deriving (Eq, Show, Enum)
-data Casilla = Casilla Constante | Operador Position | Vacia deriving (Eq)
+data Casilla = Casilla Constante | Operador Orientation | Vacia deriving (Eq)
 
 instance (Show Casilla) where
     show Vacia = "[    ]"
@@ -48,7 +48,7 @@ data Orientation = UP | DOWN | LEFT | RIGHT deriving (Eq)
 
 data ContingencyPlayer = PlayerTrue | PlayerFalse deriving (Eq, Show, Enum)
 data ContingencyGame = ContingencyGame Tablero Operadores
-data ContingencyAction = ContingencyAction Operador Orientation Int deriving (Show)
+data ContingencyAction = ContingencyAction Operador Orientation Int deriving (Eq, Show)
 
 instance (Show Orientation) where
     show UP = "ARR"
@@ -83,7 +83,7 @@ actions _ _ = error "actions has not been implemented!" --TODO
 nextState :: ContingencyGame -> ContingencyPlayer -> ContingencyAction -> IO ContingencyGame
 nextState (ContingencyGame board operators) player (ContingencyAction operator orientation n)
                                                                 | (isFinished (ContingencyGame board operators)) = error "Juego ya finalizado!"
-                                                                | not (elem (ContingencyAction operator orientation n) actions) = error "La casilla no se puede ubicar ahi!"
+                                                                | not (elem (ContingencyAction operator orientation n) (actions (ContingencyGame board operators) player)) = error "La casilla no se puede ubicar ahi!"
                                                                 | otherwise = error "To implement"
 
 -- chequear que la posicion en el tablero esté vacia
