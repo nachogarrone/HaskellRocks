@@ -30,7 +30,7 @@ type Tablero = [Casilla]
 type Constantes = [Constante]
 type Operadores = [Operador]
 data Operador = AND2 | AND3 | OR2 | OR3 | XOR | IFF | IF | NOT deriving (Eq, Show, Enum)
-data Casilla = Casilla Constante | Operador Posicion | Vacia deriving (Eq)
+data Casilla = Casilla Constante | Operador Position | Vacia deriving (Eq)
 
 instance (Show Casilla) where
     show Vacia = "[ ]"
@@ -44,17 +44,17 @@ instance (Show Constante) where
 type Valor = Bool
 type Estado = Bool
 
-data Posicion = Arriba | Abajo | Izquierda | Derecha deriving (Eq)
+data Position = UP | DOWN | LEFT | RIGHT deriving (Eq)
 
 data ContingencyPlayer = PlayerTrue | PlayerFalse deriving (Eq, Show, Enum)
 data ContingencyGame = ContingencyGame Tablero Operadores
-data ContingencyAction = ContingencyAction Operador Posicion Int deriving (Show)
+data ContingencyAction = ContingencyAction Operador Position Int deriving (Show)
 
-instance (Show Posicion) where
-    show Arriba = "Arriba"
-    show Abajo = "Abajo"
-    show Derecha = "Derecha"
-    show Izquierda = "Izquierda"
+instance (Show Position) where
+    show UP = "ARR"
+    show DOWN = "ABA"
+    show RIGHT = "DER"
+    show LEFT = "IZQ"
 
 -- OESTE
 
