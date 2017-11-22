@@ -30,7 +30,7 @@ type Tablero = [Casilla]
 type Constantes = [Constante]
 type Operadores = [Operador]
 data Operador = AND2 | AND3 | OR2 | OR3 | XOR | IFF | IF | NOT deriving (Eq, Show, Enum)
-data Casilla = Casilla Constante | Operador Position | Vacia deriving (Eq)
+data Casilla = Casilla Constante | Operador Orientation | Vacia deriving (Eq)
 
 instance (Show Casilla) where
     show Vacia = "[    ]"
@@ -66,7 +66,11 @@ beginning = do
     return (ContingencyGame board operators)
 
 activePlayer :: ContingencyGame -> Maybe ContingencyPlayer
-activePlayer (ContingencyGame board operators) = if (isFinished (ContingencyGame board operators)) then Nothing else (if ((mod (contarOper board) 2)==0) then Just PlayerTrue else Just PlayerFalse)
+activePlayer (ContingencyGame board operators) = if (isFinished (ContingencyGame board operators)) then
+    Nothing else
+        (if ((mod (contarOper board) 2)==0) then
+            Just PlayerTrue
+            else Just PlayerFalse)
 
 contarOper :: Tablero -> Int
 contarOper tabl = length (filter (filtroOper) tabl)
@@ -78,7 +82,12 @@ filtroOper _ = False
 -------------------------------
 
 actions :: ContingencyGame -> ContingencyPlayer -> [ContingencyAction]
-actions _ _ = error "actions has not been implemented!" --TODO
+actions game player = do
+    let x = (activePlayer game)
+    if (fromJust x) /= player then []
+    else do
+        []
+
 
 nextState :: ContingencyGame -> ContingencyPlayer -> ContingencyAction -> IO ContingencyGame
 nextState (ContingencyGame board operators) player (ContingencyAction operator orientation n)
