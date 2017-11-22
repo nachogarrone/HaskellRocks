@@ -10,6 +10,19 @@ import Data.Maybe
 import System.Random
 
 
+constants = [(Constante True False),(Constante True False),(Constante True False),(Constante True False),
+             (Constante False False),(Constante False False),(Constante False False),(Constante False False)]
+
+
+operators = [AND2,AND2,AND2,AND2,AND2,AND2, -- 6x AND2
+             OR2,OR2,OR2,OR2,OR2,OR2, -- 6x OR2
+             AND3,AND3,AND3, -- 3x AND3
+             OR3,OR3,OR3, -- 3x OR3
+             XOR,XOR,XOR,XOR, -- 4x XOR
+             IFF,IFF,IFF,IFF, -- 4x IFF
+             IF,IF, -- 2x IF
+             NOT,NOT -- 2x NOT
+             ]
 
 -- Game logic stub ---------------------------------------------------------------------------------
 
@@ -17,7 +30,7 @@ type Tablero = [Casilla]
 type Constantes = [Constante]
 type Operadores = [Operador]
 data Operador = AND2 | AND3 | OR2 | OR3 | XOR | IFF | IF | NOT deriving (Eq, Show, Enum)
-data Casilla = Casilla Constante | Operador Posicion | Vacia
+data Casilla = Casilla Constante | Operador Posicion | Vacia deriving (Eq)
 
 instance (Show Casilla) where
     show Vacia = "[ ]"
@@ -31,21 +44,39 @@ instance (Show Constante) where
 type Valor = Bool
 type Estado = Bool
 
-data Posicion = Arriba | Abajo | Izquierda | Derecha
+data Posicion = Arriba | Abajo | Izquierda | Derecha deriving (Eq)
 
 data ContingencyPlayer = PlayerTrue | PlayerFalse deriving (Eq, Show, Enum)
-data ContingencyGame = ContingencyGame Tablero Constantes Operadores
-data ContingencyAction
+data ContingencyGame = ContingencyGame Tablero Operadores
+data ContingencyAction = ContingencyAction Operador Posicion Int deriving (Show)
+
+instance (Show Posicion) where
+    show Arriba = "Arriba"
+    show Abajo = "Abajo"
+    show Derecha = "Derecha"
+    show Izquierda = "Izquierda"
 
 -- OESTE
 
 -- beginning y nextState tienen IO porque pueden tener aleatoriedad
 
 beginning :: IO ContingencyGame
-beginning = error "beginning has not been implemented!" --TODO
+beginning = do
+    board <- buildBoard constants
+--     print board
+    return (ContingencyGame board operators)
 
 activePlayer :: ContingencyGame -> Maybe ContingencyPlayer
-activePlayer _ = error "activePlayer has not been implemented!" --TODO
+activePlayer (ContingencyGame board operators) = if (isFinished (ContingencyGame board operators)) then Nothing else (if ((mod (contarOper board) 2)==0) then Just PlayerTrue else Just PlayerFalse)
+
+contarOper :: Tablero -> Int
+contarOper tabl = length (filter (filtroOper) tabl)
+
+filtroOper :: Casilla -> Bool
+filtroOper (Operador _) = True
+filtroOper _ = False
+
+-------------------------------
 
 actions :: ContingencyGame -> ContingencyPlayer -> [ContingencyAction]
 actions _ _ = error "actions has not been implemented!" --TODO
@@ -54,13 +85,14 @@ nextState :: ContingencyGame -> ContingencyPlayer -> ContingencyAction -> IO Con
 nextState _ _ _ = error "nextState has not been implemented!" --TODO
 
 isFinished :: ContingencyGame -> Bool
-isFinished _ = error "isFinished has not been implemented!" --TODO
+isFinished (ContingencyGame board operators) = if ((length (filter (== Vacia) board))==4) then True else False
+
 
 score :: ContingencyGame -> ContingencyPlayer -> Int
 score _ _ = error "score has not been implemented!" --TODO
 
 showBoard :: ContingencyGame -> String
-showBoard (ContingencyGame tablero _ _)  = auxTabl tablero 0
+showBoard (ContingencyGame tablero _)  = auxTabl tablero 0
 --showBoard _ = error "showBoard has not been implemented!" --TODO
 
 auxTabl :: Tablero -> Int -> String
@@ -71,7 +103,7 @@ auxTabl (x:xs) n = show x ++ auxTabl xs (n+1)
 
 
 showAction :: ContingencyAction -> String
-showAction _ = error "showAction has not been implemented!" --TODO
+showAction (ContingencyAction operator position n) = (show operator ++ " ") ++ ((show position ++ " ") ++ show n)
 
 readAction :: String -> ContingencyAction
 readAction _ = error "readAction has not been implemented!" --TODO
