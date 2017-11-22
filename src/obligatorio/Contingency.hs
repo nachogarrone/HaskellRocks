@@ -33,7 +33,7 @@ data Operador = AND2 | AND3 | OR2 | OR3 | XOR | IFF | IF | NOT deriving (Eq, Sho
 data Casilla = Casilla Constante | Operador Position | Vacia deriving (Eq)
 
 instance (Show Casilla) where
-    show Vacia = "[ ]"
+    show Vacia = "[    ]"
     show (Casilla (Constante v e)) = if e then if v then "[ CT ]" else "[ CF ]" else "[ C? ]"
 
 data Constante = Constante Valor Estado deriving (Eq)
