@@ -46,7 +46,7 @@ type Estado = Bool
 
 data Orientation = UP | DOWN | LEFT | RIGHT deriving (Eq)
 
-data ContingencyPlayer = PlayerTrue | PlayerFalse deriving (Eq, Show, Enum)
+data ContingencyPlayer = PlayerTrue Operadores | PlayerFalse Operadores deriving (Eq, Show)
 data ContingencyGame = ContingencyGame Tablero Operadores
 data ContingencyAction = ContingencyAction Operador Orientation Int deriving (Eq, Show)
 
@@ -69,8 +69,8 @@ activePlayer :: ContingencyGame -> Maybe ContingencyPlayer
 activePlayer (ContingencyGame board operators) = if (isFinished (ContingencyGame board operators)) then
     Nothing else
         (if ((mod (contarOper board) 2)==0) then
-            Just PlayerTrue
-            else Just PlayerFalse)
+            Just (PlayerTrue operators)
+            else Just (PlayerFalse operators))
 
 contarOper :: Tablero -> Int
 contarOper tabl = length (filter (filtroOper) tabl)
@@ -163,7 +163,7 @@ runMatch players@(agTrue, agFalse) g = do
 runOnConsole :: IO (Int, Int)
 runOnConsole = do
   board <- beginning
-  runMatch (PlayerTrue, PlayerFalse) board
+  runMatch (PlayerTrue [], PlayerFalse []) board
 
 
 
