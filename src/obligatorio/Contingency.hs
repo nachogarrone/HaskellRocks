@@ -44,13 +44,13 @@ instance (Show Constante) where
 type Valor = Bool
 type Estado = Bool
 
-data Position = UP | DOWN | LEFT | RIGHT deriving (Eq)
+data Orientation = UP | DOWN | LEFT | RIGHT deriving (Eq)
 
 data ContingencyPlayer = PlayerTrue | PlayerFalse deriving (Eq, Show, Enum)
 data ContingencyGame = ContingencyGame Tablero Operadores
-data ContingencyAction = ContingencyAction Operador Position Int deriving (Show)
+data ContingencyAction = ContingencyAction Operador Orientation Int deriving (Show)
 
-instance (Show Position) where
+instance (Show Orientation) where
     show UP = "ARR"
     show DOWN = "ABA"
     show RIGHT = "DER"
@@ -63,7 +63,6 @@ instance (Show Position) where
 beginning :: IO ContingencyGame
 beginning = do
     board <- buildBoard constants
---     print board
     return (ContingencyGame board operators)
 
 activePlayer :: ContingencyGame -> Maybe ContingencyPlayer
@@ -82,7 +81,14 @@ actions :: ContingencyGame -> ContingencyPlayer -> [ContingencyAction]
 actions _ _ = error "actions has not been implemented!" --TODO
 
 nextState :: ContingencyGame -> ContingencyPlayer -> ContingencyAction -> IO ContingencyGame
-nextState _ _ _ = error "nextState has not been implemented!" --TODO
+nextState (ContingencyGame board operators) player (ContingencyAction operator orientation n)
+                                                                | (isFinished (ContingencyGame board operators)) = error "Juego ya finalizado!"
+                                                                | not (elem (ContingencyAction operator orientation n) actions) = error "La casilla no se puede ubicar ahi!"
+                                                                | otherwise = error "To implement"
+
+-- chequear que la posicion en el tablero esté vacia
+executeAction :: Tablero -> ContingencyAction -> Tablero
+executeAction board (ContingencyAction operation orientation n) = board
 
 isFinished :: ContingencyGame -> Bool
 isFinished (ContingencyGame board operators) = if ((length (filter (== Vacia) board))==4) then True else False
@@ -92,18 +98,18 @@ score :: ContingencyGame -> ContingencyPlayer -> Int
 score _ _ = error "score has not been implemented!" --TODO
 
 showBoard :: ContingencyGame -> String
-showBoard (ContingencyGame tablero _)  = auxTabl tablero 0
+showBoard (ContingencyGame board _)  = auxTabl board 0
 --showBoard _ = error "showBoard has not been implemented!" --TODO
 
 auxTabl :: Tablero -> Int -> String
-auxTabl [x] 4 = show x ++ "\n"
+auxTabl [x] 6 = show x ++ "\n"
 auxTabl [x] _ = show x ++ "\n"
-auxTabl (x:xs) 4 = (show x ++ "\n") ++ auxTabl xs (0)
+auxTabl (x:xs) 6 = (show x ++ "\n") ++ auxTabl xs (0)
 auxTabl (x:xs) n = show x ++ auxTabl xs (n+1)
 
 
 showAction :: ContingencyAction -> String
-showAction (ContingencyAction operator position n) = (show operator ++ " ") ++ ((show position ++ " ") ++ show n)
+showAction (ContingencyAction operator orientation n) = (show operator ++ " ") ++ ((show orientation ++ " ") ++ show n)
 
 readAction :: String -> ContingencyAction
 readAction _ = error "readAction has not been implemented!" --TODO
@@ -119,7 +125,7 @@ randomAgent _ _ = error "randomAgent has not been implemented!"
 
 
 --  a1, a5, b2, b4, d2, d4, e1 y e5.
-positions = "1000101010000000101010001"
+positions = "0TTTTT0T10001FT01010FT00000FT01010FT10001F0FFFFF0"
 buildBoard constants = do
     shuffConstants <- (shuffle constants)
     return (mapPosition positions shuffConstants 0)
@@ -128,6 +134,8 @@ mapPosition [] _ _ = []
 mapPosition (x:xs) c i
     | x == '1' = ((Casilla (c !! i)) : (mapPosition xs c (i+1)))
     | x == '0' = (Vacia: (mapPosition xs c i))
+    | x == 'T' = ((Casilla (Constante True True)) : (mapPosition xs c (i)))
+    | x == 'F' = ((Casilla (Constante False True)) : (mapPosition xs c (i)))
     | otherwise = error("Wrong cell detected")
 
 runMatch :: (ContingencyPlayer, ContingencyPlayer) -> ContingencyGame -> IO (Int, Int)
@@ -169,3 +177,11 @@ insertAt l y i
     | ((length l) == 0) && (i == 0) = [y]
     | (length l) < i = error "index out of range"
     | otherwise = (take i l)++[y]++(drop i l)
+
+replace :: [Casilla] -> Int  -> Casilla -> [Casilla]
+replace xs n el = take n xs ++ [el] ++ drop (n + 1) xs
+
+enableConstant :: Casilla -> Casilla
+enableConstant (Casilla (Constante v False)) = (Casilla (Constante v True))
+enableConstant (Casilla (Constante v True)) = (Casilla (Constante v True))
+enableConstant c = c
