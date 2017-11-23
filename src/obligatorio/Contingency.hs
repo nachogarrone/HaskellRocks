@@ -8,7 +8,7 @@ module Contingency where
 
 import Data.Maybe
 import System.Random
-
+import System.IO.Unsafe
 
 constants = [(Constante True False),(Constante True False),(Constante True False),(Constante True False),
              (Constante False False),(Constante False False),(Constante False False),(Constante False False)]
@@ -179,7 +179,7 @@ shuffle xs = do randomPosition <- getStdRandom (randomR (0, length xs - 1))
                 let (left, (a:right)) = splitAt randomPosition xs
                 fmap (a:) (shuffle (left ++ right))
 
-removeItem _ [] = []
+removeItem _ [a] = [a]
 removeItem x (y:ys)
     | x == y    = ys
     | otherwise = y : removeItem x ys
@@ -198,7 +198,12 @@ enableConstant (Casilla (Constante v True)) = (Casilla (Constante v True))
 enableConstant c = c
 
 generatePlayerOperators :: (ContingencyPlayer, ContingencyPlayer) -> Operadores -> (ContingencyPlayer, ContingencyPlayer)
-generatePlayerOperators x [] = x
+generatePlayerOperators (a, b) [] = (a, b)
 generatePlayerOperators (PlayerTrue opTrue, PlayerFalse opFalse) o = do
-    x <- (return (pick o))
-    (PlayerTrue (x:opTrue), PlayerFalse (x:opFalse))
+    let randomOperatorT = unsafePerformIO (pick o)
+    let randomOperatorF = unsafePerformIO (pick o)
+    (PlayerTrue (randomOperatorT:opTrue), PlayerFalse (randomOperatorF:opFalse))
+    -- let o2 = removeItem t o
+    -- f <- (return (pick o2))
+    -- let o3 = removeItem f o2
+    -- generatePlayerOperators (PlayerTrue (t:opTrue), PlayerFalse (f:opFalse)) o3
