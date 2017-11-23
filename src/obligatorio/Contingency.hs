@@ -47,7 +47,7 @@ type Estado = Bool
 data Orientation = UP | DOWN | LEFT | RIGHT deriving (Eq)
 
 data ContingencyPlayer = PlayerTrue Operadores | PlayerFalse Operadores deriving (Eq, Show)
-data ContingencyGame = ContingencyGame Tablero Operadores
+data ContingencyGame = ContingencyGame Tablero (ContingencyPlayer, ContingencyPlayer)
 data ContingencyAction = ContingencyAction Operador Orientation Int deriving (Eq, Show)
 
 instance (Show Orientation) where
@@ -63,14 +63,15 @@ instance (Show Orientation) where
 beginning :: IO ContingencyGame
 beginning = do
     board <- buildBoard constants
-    return (ContingencyGame board operators)
+    --TODO: Need to load in every player their operators which were retrieved randomly
+    return (ContingencyGame board (PlayerTrue [AND2], PlayerFalse [OR2]))
 
 activePlayer :: ContingencyGame -> Maybe ContingencyPlayer
-activePlayer (ContingencyGame board operators) = if (isFinished (ContingencyGame board operators)) then
+activePlayer (ContingencyGame board (PlayerTrue opT, PlayerFalse opF)) = if (isFinished (ContingencyGame board (PlayerTrue opT, PlayerFalse opF))) then
     Nothing else
         (if ((mod (contarOper board) 2)==0) then
-            Just (PlayerTrue operators)
-            else Just (PlayerFalse operators))
+            Just (PlayerTrue opT)
+            else Just (PlayerFalse opF))
 
 contarOper :: Tablero -> Int
 contarOper tabl = length (filter (filtroOper) tabl)
