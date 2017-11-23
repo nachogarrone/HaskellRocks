@@ -63,7 +63,8 @@ instance (Show Orientation) where
 beginning :: IO ContingencyGame
 beginning = do
     board <- buildBoard constants
-    --TODO: Need to load in every player their operators which were retrieved randomly
+    {- TODO: Need to load in every player their operators which were retrieved randomly CHECK generatePlayerOperators
+    AND2 and OR2 have to be replaced by a list generated from generatePlayerOperators-}
     return (ContingencyGame board (PlayerTrue [AND2], PlayerFalse [OR2]))
 
 activePlayer :: ContingencyGame -> Maybe ContingencyPlayer
@@ -168,7 +169,7 @@ runOnConsole = do
 
 
 
--- AUXILIARES
+-- Helpers
 pick :: [a] -> IO a
 pick xs = fmap (xs !!) $ randomRIO (0, length xs - 1)
 
@@ -195,3 +196,9 @@ enableConstant :: Casilla -> Casilla
 enableConstant (Casilla (Constante v False)) = (Casilla (Constante v True))
 enableConstant (Casilla (Constante v True)) = (Casilla (Constante v True))
 enableConstant c = c
+
+generatePlayerOperators :: (ContingencyPlayer, ContingencyPlayer) -> Operadores -> (ContingencyPlayer, ContingencyPlayer)
+generatePlayerOperators x [] = x
+generatePlayerOperators (PlayerTrue opTrue, PlayerFalse opFalse) o = do
+    x <- (return (pick o))
+    (PlayerTrue (x:opTrue), PlayerFalse (x:opFalse))
