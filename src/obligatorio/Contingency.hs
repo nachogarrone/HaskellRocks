@@ -110,7 +110,26 @@ actions (ContingencyGame board (PlayerTrue opTrue, PlayerFalse opFalse)) player 
 retrievePossibleMoves :: Tablero -> ContingencyPlayer -> [ContingencyAction]
 retrievePossibleMoves board (PlayerTrue []) = []
 retrievePossibleMoves board (PlayerFalse []) = []
-retrievePossibleMoves board (PlayerTrue opers) = 
+retrievePossibleMoves board (PlayerTrue opers) = do
+    playerOperator <- return (head opers)
+    let newOpers = removeItem playerOperator opers
+    let constantNeeded = classifyOperator playerOperator
+    if playerOperator == 1 then
+
+    else if playerOperator == 2 then
+    else 
+
+    return ""
+
+classifyOperator :: Operador -> Int
+classifyOperator o
+        | (elem '2' o) || (o == "IFF") || (o == "IF") || (o == "XOR") = 2
+        | elem '3' o = 3
+        | othwerwise = 1
+
+retrieveMovesByOperatorType :: Int -> Tablero -> [ContingencyAction]
+retrieveMovesByOperatorType n board
+        | n == 1 = let x = filter(\x -> x == (Casilla Constante)) board 
 
 
 
