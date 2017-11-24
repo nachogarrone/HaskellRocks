@@ -63,9 +63,8 @@ instance (Show Orientation) where
 beginning :: IO ContingencyGame
 beginning = do
     board <- buildBoard constants
-    {- TODO: Need to load in every player their operators which were retrieved randomly CHECK generatePlayerOperators
-    AND2 and OR2 have to be replaced by a list generated from generatePlayerOperators-}
-    return (ContingencyGame board (PlayerTrue [AND2], PlayerFalse [OR2]))
+    (p1, p2) <- generatePlayerOperators(PlayerTrue [], PlayerFalse []) operators
+    return (ContingencyGame board (p1, p2))
 
 activePlayer :: ContingencyGame -> Maybe ContingencyPlayer
 activePlayer (ContingencyGame board (PlayerTrue opT, PlayerFalse opF)) = if (isFinished (ContingencyGame board (PlayerTrue opT, PlayerFalse opF))) then
@@ -93,9 +92,9 @@ actions game player = do
 
 nextState :: ContingencyGame -> ContingencyPlayer -> ContingencyAction -> IO ContingencyGame
 nextState (ContingencyGame board operators) player (ContingencyAction operator orientation n)
-                                                                | (isFinished (ContingencyGame board operators)) = error "Juego ya finalizado!"
-                                                                | not (elem (ContingencyAction operator orientation n) (actions (ContingencyGame board operators) player)) = error "La casilla no se puede ubicar ahi!"
-                                                                | otherwise = error "To implement"
+    | (isFinished (ContingencyGame board operators)) = error "Juego ya finalizado!"
+    | not (elem (ContingencyAction operator orientation n) (actions (ContingencyGame board operators) player)) = error "La casilla no se puede ubicar ahi!"
+    | otherwise = error "To implement"
 
 -- chequear que la posicion en el tablero esté vacia
 executeAction :: Tablero -> ContingencyAction -> Tablero
@@ -171,7 +170,9 @@ runOnConsole = do
 
 -- Helpers
 pick :: [a] -> IO a
-pick xs = fmap (xs !!) $ randomRIO (0, length xs - 1)
+pick xs = do
+  index <- randomRIO (0, length xs - 1)
+  return  (xs !! index)
 
 shuffle :: [a] -> IO [a]
 shuffle [] = return []
@@ -179,7 +180,7 @@ shuffle xs = do randomPosition <- getStdRandom (randomR (0, length xs - 1))
                 let (left, (a:right)) = splitAt randomPosition xs
                 fmap (a:) (shuffle (left ++ right))
 
-removeItem _ [a] = [a]
+removeItem _ [] = []
 removeItem x (y:ys)
     | x == y    = ys
     | otherwise = y : removeItem x ys
@@ -197,13 +198,11 @@ enableConstant (Casilla (Constante v False)) = (Casilla (Constante v True))
 enableConstant (Casilla (Constante v True)) = (Casilla (Constante v True))
 enableConstant c = c
 
-generatePlayerOperators :: (ContingencyPlayer, ContingencyPlayer) -> Operadores -> (ContingencyPlayer, ContingencyPlayer)
-generatePlayerOperators (a, b) [] = (a, b)
+generatePlayerOperators :: (ContingencyPlayer, ContingencyPlayer) -> Operadores -> IO (ContingencyPlayer, ContingencyPlayer)
+generatePlayerOperators (a, b) [] = return (a, b)
 generatePlayerOperators (PlayerTrue opTrue, PlayerFalse opFalse) o = do
-    let randomOperatorT = unsafePerformIO (pick o)
-    let randomOperatorF = unsafePerformIO (pick o)
-    (PlayerTrue (randomOperatorT:opTrue), PlayerFalse (randomOperatorF:opFalse))
-    -- let o2 = removeItem t o
-    -- f <- (return (pick o2))
-    -- let o3 = removeItem f o2
-    -- generatePlayerOperators (PlayerTrue (t:opTrue), PlayerFalse (f:opFalse)) o3
+    randomOperatorP1 <-  pick o
+    let o2 = removeItem randomOperatorP1 o
+    randomOperatorP2 <-  pick o2
+    let o3 = removeItem randomOperatorP2 o2
+    generatePlayerOperators (PlayerTrue (opTrue ++ [randomOperatorP1]), PlayerFalse (opFalse ++ [randomOperatorP2])) o3
