@@ -82,12 +82,39 @@ filtroOper _ = False
 
 -------------------------------
 
+-- actions :: ContingencyGame -> ContingencyPlayer -> [ContingencyAction]
+-- actions (ContingencyGame tabl oper) p = let actPlay = activePlayer((ContingencyGame tabl oper))
+--                                             in (if(Just(p)==actPlay)then(auxActions tabl (map head (group oper)) 9)else([])) 
+-- --actions _ _ = error "actions has not been implemented!" --TODO
+
+-- auxActions :: Tablero -> Operadores -> Int -> [ContingencyAction]
+-- auxActions _ _ 41 = []
+-- auxActions tabl oper i = if(tabl !! i == Vacia)then((auxAction tabl oper i) ++ (auxActions tabl oper (i+1)))else(auxActions tabl oper (i+1))
+
+
+-- auxAction :: Tablero -> Operadores -> Int -> [ContingencyAction]
+-- auxAction tabl [] i  = []
+-- auxAction tabl oper i  = let op = head oper
+--                              cola = tail oper
+--                              acts = (auxOper tabl i op)
+--                              in (acts) ++ (auxAction tabl cola i)
+
+
 actions :: ContingencyGame -> ContingencyPlayer -> [ContingencyAction]
-actions game player = do
-    let x = (activePlayer game)
-    if (fromJust x) /= player then []
+actions (ContingencyGame board (PlayerTrue opTrue, PlayerFalse opFalse)) player = do
+    let actPlayer = (activePlayer (ContingencyGame board (PlayerTrue opTrue, PlayerFalse opFalse)))
+    if (fromJust actPlayer) /= player then []
     else do
-        []
+        retrievePossibleMoves board player
+
+retrievePossibleMoves :: Tablero -> ContingencyPlayer -> [ContingencyAction]
+retrievePossibleMoves board (PlayerTrue []) = []
+retrievePossibleMoves board (PlayerFalse []) = []
+retrievePossibleMoves board (PlayerTrue opers) = 
+
+
+
+
 
 
 nextState :: ContingencyGame -> ContingencyPlayer -> ContingencyAction -> IO ContingencyGame
