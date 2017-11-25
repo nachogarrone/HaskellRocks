@@ -48,7 +48,7 @@ data Orientation = UP | DOWN | LEFT | RIGHT deriving (Eq)
 
 data ContingencyPlayer = PlayerTrue Operadores | PlayerFalse Operadores deriving (Eq, Show)
 data ContingencyGame = ContingencyGame Tablero (ContingencyPlayer, ContingencyPlayer)
-data ContingencyAction = ContingencyAction Operador Orientation Int deriving (Eq, Show)
+data ContingencyAction = ContingencyAction Operador Orientation Int Valor deriving (Eq, Show)
 
 instance (Show Orientation) where
     show UP = "ARR"
@@ -132,8 +132,23 @@ retrieveMovesByOperatorType n board
         | n == 1 = let x = filter(\x -> x == (Casilla Constante)) board 
 
 
+getMoveIndex :: Int -> Tablero -> Operador -> Int -> Maybe ContingencyAction
+getMoveIndex _ [] _ _ = Nothing
+getMoveIndex n (x:xs) operador i
+        | x == Vacia    
+            if n == 1 then do -- I need to check top, bottom, right and left. Whichever of those, works!
+                --BEWARE OF GOING OUT OF THE BOARD
+                let u = ((x:xs)!!(i-8)) --up
+                let r = ((x:xs)!!(i+1)) --right
+                let l = ((x:xs)!!(i-1)) --left
+                let d = ((x:xs)!!(i+8)) --down
+                if (u /= Vacia) then
+                    
 
 
+--                 [(ContingencyAction operador UP i False), 
+--                 (ContingencyAction operador LEFT i False), 
+--                 (ContingencyAction operador RIGHT i True)]:(getMoveIndex n xs operador (i+1)
 
 
 nextState :: ContingencyGame -> ContingencyPlayer -> ContingencyAction -> IO ContingencyGame
