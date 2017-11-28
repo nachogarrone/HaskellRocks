@@ -113,10 +113,10 @@ retrievePossibleMoves board (PlayerFalse []) = []
 retrievePossibleMoves board (PlayerTrue opers) = do
     playerOperator <- return (head opers)
     let newOpers = removeItem playerOperator opers
-    let constantNeeded = classifyOperator playerOperator
-    if playerOperator == 1 then
-
-    else if playerOperator == 2 then
+    let valuesNeeded = classifyOperator playerOperator
+    if valuesNeeded == 1 then
+        
+    else if valuesNeeded == 2 then
     else 
 
     return ""
