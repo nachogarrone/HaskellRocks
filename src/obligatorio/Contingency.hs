@@ -96,12 +96,7 @@ retrievePossibleMoves board (PlayerTrue opers) = do
     playerOperator <- return (head opers)
     let newOpers = removeItem playerOperator opers
     let valuesNeeded = classifyOperator playerOperator
-    if valuesNeeded == 1 then
-        
-    else if valuesNeeded == 2 then
-    else 
-
-    return ""
+    retrieveMovesByOperatorType valuesNeeded board
 
 classifyOperator :: Operador -> Int
 classifyOperator o
