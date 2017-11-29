@@ -157,7 +157,6 @@ nextState (ContingencyGame board operators) player (ContingencyAction operator o
     | not (elem (ContingencyAction operator orientation n) (actions (ContingencyGame board operators) player)) = error "La casilla no se puede ubicar ahi!"
     | otherwise = error "To implement"
 
--- chequear que la posicion en el tablero esté vacia
 executeAction :: Tablero -> ContingencyAction -> Tablero
 executeAction board (ContingencyAction operation orientation n) = board
 
@@ -192,7 +191,10 @@ consoleAgent :: ContingencyGame -> ContingencyPlayer -> IO ContingencyAction
 consoleAgent _ _ = error "consoleAgent has not been implemented!"
 
 randomAgent :: ContingencyGame -> ContingencyPlayer -> IO ContingencyAction
-randomAgent _ _ = error "randomAgent has not been implemented!"
+randomAgent game player = let _actions = actions game player in do
+                                rnum <- getStdRandom (randomR (0,(length acciones) - 1))
+                                return (acciones !! rnum)
+
 
 
 --  a1, a5, b2, b4, d2, d4, e1 y e5.
