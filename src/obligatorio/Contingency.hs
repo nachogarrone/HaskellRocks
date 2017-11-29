@@ -194,7 +194,8 @@ nextState (ContingencyGame board operators) player (ContingencyAction operator o
     | otherwise = return (ContingencyGame (executeAction board (ContingencyAction operator orientation n)) operators)
 
 executeAction :: Tablero -> ContingencyAction -> Tablero
-executeAction casillas (ContingencyAction operation orientation n) = replace casillas n (operation orientation)
+executeAction board (ContingencyAction operator orientation n) = board
+-- executeAction casillas (ContingencyAction operator orientation n) = replace casillas n (operator orientation)
 
 isFinished :: ContingencyGame -> Bool
 isFinished (ContingencyGame board operators) = if ((length (filter (== Vacia) board))==4) then True else False
