@@ -187,26 +187,6 @@ retrieveMovesByOperatorType oper n (x:xs) i actionList
 
         | otherwise = error("Wrong number of operands detected. We can't proccess it.")
 
-
--- getMoveIndex :: Int -> Tablero -> Operador -> Int -> Maybe ContingencyAction
--- getMoveIndex _ [] _ _ = Nothing
--- getMoveIndex n (x:xs) operador i
---         | x == Vacia    
---             if n == 1 then do -- I need to check top, bottom, right and left. Whichever of those, works!
---                 --BEWARE OF GOING OUT OF THE BOARD
---                 let u = ((x:xs)!!(i-8)) --up
---                 let r = ((x:xs)!!(i+1)) --right
---                 let l = ((x:xs)!!(i-1)) --left
---                 let d = ((x:xs)!!(i+8)) --down
---                 if (u /= Vacia) then
-                    
-
-
---                 [(ContingencyAction operador UP i False), 
---                 (ContingencyAction operador LEFT i False), 
---                 (ContingencyAction operador RIGHT i True)]:(getMoveIndex n xs operador (i+1)
-
-
 nextState :: ContingencyGame -> ContingencyPlayer -> ContingencyAction -> IO ContingencyGame
 nextState (ContingencyGame board operators) player (ContingencyAction operator orientation n)
     | (isFinished (ContingencyGame board operators)) = error "Juego ya finalizado!"
