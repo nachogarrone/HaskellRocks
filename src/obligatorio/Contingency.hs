@@ -105,6 +105,7 @@ classifyOperator o
         | otherwise = 1
 
 retrieveMovesByOperatorType :: Int -> Tablero -> [ContingencyAction]
+retrieveMovesByOperatorType _ [] = []
 retrieveMovesByOperatorType n board
         | n == 1 = [] --let x = filter(\x -> x == (Casilla Constante)) board 
         | n == 2 = []
