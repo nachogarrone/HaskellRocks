@@ -165,7 +165,9 @@ isFinished (ContingencyGame board operators) = if ((length (filter (== Vacia) bo
 
 
 score :: ContingencyGame -> ContingencyPlayer -> Int
-score _ _ = error "score has not been implemented!" --TODO
+score (ContingencyGame tab (playerT, playerF)) player
+    | player == playerT = (length (filter True tab))
+    | player == playerF = (length (filter False tab))
 
 showBoard :: ContingencyGame -> String
 showBoard (ContingencyGame board _)  = auxTabl board 0
