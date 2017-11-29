@@ -115,18 +115,19 @@ retrieveMovesByOperatorType oper n (x:xs) i actionList
                 let down = i+7
 
                 if (left >= 7 && left < 40 && ((x:xs) !! left) /= Vacia) then
-                    (ContingencyAction oper LEFT left):actionList
+                    retrieveMovesByOperatorType oper n xs (i+1)((ContingencyAction oper LEFT (i+1)):actionList)                    
                 else
                     if (right >= 7 && right <= 41 && ((x:xs) !! right) /= Vacia) then
-                        (ContingencyAction oper RIGHT right):actionList
+                        retrieveMovesByOperatorType oper n xs (i+1)((ContingencyAction oper RIGHT (i+1)):actionList)
                     else
-                        if (up < 0 && ((x:xs) !! up) /= Vacia) then
-                            (ContingencyAction oper UP up):actionList
+                        if (up > 0 && ((x:xs) !! up) /= Vacia) then
+                            retrieveMovesByOperatorType oper n xs (i+1)((ContingencyAction oper UP (i+1)):actionList)
                         else
                             if (down < 48 && ((x:xs) !! down) /= Vacia) then
-                                (ContingencyAction oper DOWN down):actionList
+                                retrieveMovesByOperatorType oper n xs (i+1)((ContingencyAction oper DOWN (i+1)):actionList)
                             else
-                                retrieveMovesByOperatorType oper n xs (i+1) actionList
+                                --retrieveMovesByOperatorType oper n xs (i+1) actionList
+                                actionList
             else 
                 retrieveMovesByOperatorType oper n xs (i+1) actionList
         
@@ -139,12 +140,15 @@ retrieveMovesByOperatorType oper n (x:xs) i actionList
 
                 if ((left >= 7 && left < 40 && ((x:xs) !! left) /= Vacia) 
                     && (right >= 7 && right <= 41 && ((x:xs) !! right) /= Vacia))  then
-                        (ContingencyAction oper LEFT left):actionList
+                        error "left n = 2"
+                        retrieveMovesByOperatorType oper n xs (i+1)((ContingencyAction oper LEFT (i+1)):actionList)
                 else
-                    if ((up < 0 && ((x:xs) !! up) /= Vacia) && (down < 48 && ((x:xs) !! down) /= Vacia)) then
-                        (ContingencyAction oper UP up):actionList
+                    if ((up > 0 && ((x:xs) !! up) /= Vacia) && (down < 48 && ((x:xs) !! down) /= Vacia)) then
+                        error "UP/DOWN n = 2"
+                        retrieveMovesByOperatorType oper n xs (i+1)((ContingencyAction oper UP (i+1)):actionList)
                     else
-                        retrieveMovesByOperatorType oper n xs (i+1) actionList
+                        --retrieveMovesByOperatorType oper n xs (i+1) actionList
+                        actionList
             else 
                 retrieveMovesByOperatorType oper n xs (i+1) actionList
 
@@ -158,16 +162,17 @@ retrieveMovesByOperatorType oper n (x:xs) i actionList
                 if ((left >= 7 && left < 40 && ((x:xs) !! left) /= Vacia) 
                     && (right >= 7 && right <= 41 && ((x:xs) !! right) /= Vacia)
                     && ((up < 0 && ((x:xs) !! up) /= Vacia) || (down < 48 && ((x:xs) !! down) /= Vacia)))  then
-                        (ContingencyAction oper LEFT left):actionList
+                        retrieveMovesByOperatorType oper n xs (i+1)((ContingencyAction oper LEFT (i+1)):actionList)
                 else 
-                    if ((up < 0 && ((x:xs) !! up) /= Vacia) && (down < 48 && ((x:xs) !! down) /= Vacia)
+                    if ((up > 0 && ((x:xs) !! up) /= Vacia) && (down < 48 && ((x:xs) !! down) /= Vacia)
                         && ((left >= 7 && left < 40 && ((x:xs) !! left) /= Vacia)
                         || (right >= 7 && right <= 41 && ((x:xs) !! right) /= Vacia))) then
-                            (ContingencyAction oper UP up):actionList
+                            retrieveMovesByOperatorType oper n xs (i+1)((ContingencyAction oper UP (i+1)):actionList)
                     else
-                        retrieveMovesByOperatorType oper n xs (i+1) actionList
+                        --retrieveMovesByOperatorType oper n xs (i+1) actionList
+                        actionList
             else 
-                retrieveMovesByOperatorType oper n xs (i+1) actionList
+                retrieveMovesByOperatorType oper n xs (i+1) actionList                
 
         | otherwise = error("Wrong number of operands detected. We can't proccess it.")
 
