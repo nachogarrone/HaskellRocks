@@ -95,31 +95,34 @@ retrievePossibleMoves board (PlayerFalse []) = []
 retrievePossibleMoves board (PlayerTrue opers) = do
     playerOperator <- return (head opers)
     let newOpers = removeItem playerOperator opers
-    let valuesNeeded = classifyOperator playerOperator
-    retrieveMovesByOperatorType valuesNeeded board
+    let operandsNeeded = classifyOperator playerOperator
+    retrieveMovesByOperatorType operandsNeeded board
 
 classifyOperator :: Operador -> Int
 classifyOperator o
-        | (elem '2' o) || (o == "IFF") || (o == "IF") || (o == "XOR") = 2
-        | elem '3' o = 3
-        | othwerwise = 1
+        | (o == AND2) || (o == OR2) || (o == IFF) || (o == IF) || (o == XOR) = 2
+        | (o == AND3) || (o == OR3) = 3
+        | otherwise = 1
 
 retrieveMovesByOperatorType :: Int -> Tablero -> [ContingencyAction]
 retrieveMovesByOperatorType n board
-        | n == 1 = let x = filter(\x -> x == (Casilla Constante)) board 
+        | n == 1 = [] --let x = filter(\x -> x == (Casilla Constante)) board 
+        | n == 2 = []
+        | n == 3 = []
+        | otherwise = error("Wrong number of operands detected. We can't proccess it.")
 
 
-getMoveIndex :: Int -> Tablero -> Operador -> Int -> Maybe ContingencyAction
-getMoveIndex _ [] _ _ = Nothing
-getMoveIndex n (x:xs) operador i
-        | x == Vacia    
-            if n == 1 then do -- I need to check top, bottom, right and left. Whichever of those, works!
-                --BEWARE OF GOING OUT OF THE BOARD
-                let u = ((x:xs)!!(i-8)) --up
-                let r = ((x:xs)!!(i+1)) --right
-                let l = ((x:xs)!!(i-1)) --left
-                let d = ((x:xs)!!(i+8)) --down
-                if (u /= Vacia) then
+-- getMoveIndex :: Int -> Tablero -> Operador -> Int -> Maybe ContingencyAction
+-- getMoveIndex _ [] _ _ = Nothing
+-- getMoveIndex n (x:xs) operador i
+--         | x == Vacia    
+--             if n == 1 then do -- I need to check top, bottom, right and left. Whichever of those, works!
+--                 --BEWARE OF GOING OUT OF THE BOARD
+--                 let u = ((x:xs)!!(i-8)) --up
+--                 let r = ((x:xs)!!(i+1)) --right
+--                 let l = ((x:xs)!!(i-1)) --left
+--                 let d = ((x:xs)!!(i+8)) --down
+--                 if (u /= Vacia) then
                     
 
 
