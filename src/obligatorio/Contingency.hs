@@ -201,9 +201,10 @@ isFinished (ContingencyGame board operators) = if ((length (filter (== Vacia) bo
 
 
 score :: ContingencyGame -> ContingencyPlayer -> Int
-score (ContingencyGame tab (playerT, playerF)) player
-    | player == playerT = (length (filter True tab))
-    | player == playerF = (length (filter False tab))
+score _ _ = error "not implemented"
+-- score (ContingencyGame tab (playerT, playerF)) player
+--     | player == playerT = (length (filter True tab))
+--     | player == playerF = (length (filter False tab))
 
 showBoard :: ContingencyGame -> String
 showBoard (ContingencyGame board _)  = auxTabl board 0
@@ -230,8 +231,8 @@ consoleAgent _ _ = error "consoleAgent has not been implemented!"
 
 randomAgent :: ContingencyGame -> ContingencyPlayer -> IO ContingencyAction
 randomAgent game player = let _actions = actions game player in do
-                                rnum <- getStdRandom (randomR (0,(length acciones) - 1))
-                                return (acciones !! rnum)
+                                rnum <- getStdRandom (randomR (0,(length _actions) - 1))
+                                return (_actions !! rnum)
 
 
 
@@ -258,7 +259,7 @@ runMatch players@(agTrue, agFalse) g = do
     return (score g agTrue, score g agFalse)
   else do
     let active = fromJust (activePlayer g)
-    nextAction <- (consoleAgent g active)
+    nextAction <- (randomAgent g active)
     nextBoard <- (nextState g active nextAction)
     runMatch players nextBoard
 
