@@ -96,7 +96,7 @@ retrievePossibleMoves board (PlayerTrue opers) = do
     playerOperator <- return (head opers)
     let newOpers = removeItem playerOperator opers
     let operandsNeeded = classifyOperator playerOperator
-    retrieveMovesByOperatorType operandsNeeded board
+    retrieveMovesByOperatorType playerOperator operandsNeeded board 8 []
 
 classifyOperator :: Operador -> Int
 classifyOperator o
@@ -104,10 +104,29 @@ classifyOperator o
         | (o == AND3) || (o == OR3) = 3
         | otherwise = 1
 
-retrieveMovesByOperatorType :: Int -> Tablero -> [ContingencyAction]
-retrieveMovesByOperatorType _ [] = []
-retrieveMovesByOperatorType n board
-        | n == 1 = [] --let x = filter(\x -> x == (Casilla Constante)) board 
+retrieveMovesByOperatorType :: Operador -> Int -> Tablero -> Int -> [ContingencyAction] -> [ContingencyAction]
+retrieveMovesByOperatorType _ _ [] _ _ = []
+retrieveMovesByOperatorType oper n (x:xs) i actionList 
+        | n == 1 = 
+            if (x == Vacia) then do
+                let left = i-1
+                let right = i+1
+                let up = i-8
+                let down = i+8
+
+                if (left >= 7 && left <= 41 && ((x:xs) !! left) /= Vacia) then
+                    (ContingencyAction oper LEFT left):actionList
+                else
+                    actionList
+                
+                if (right <= 41 && ((x:xs) !! right) /= Vacia) then 
+                    (ContingencyAction oper RIGHT right):actionList
+                else
+                    actionList
+                    
+                retrieveMovesByOperatorType oper n xs (i+1) actionList
+            else 
+                retrieveMovesByOperatorType oper n xs (i+1) actionList             
         | n == 2 = []
         | n == 3 = []
         | otherwise = error("Wrong number of operands detected. We can't proccess it.")
