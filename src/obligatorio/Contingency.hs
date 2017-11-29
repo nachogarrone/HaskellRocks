@@ -48,7 +48,7 @@ data Orientation = UP | DOWN | LEFT | RIGHT deriving (Eq)
 
 data ContingencyPlayer = PlayerTrue Operadores | PlayerFalse Operadores deriving (Eq, Show)
 data ContingencyGame = ContingencyGame Tablero (ContingencyPlayer, ContingencyPlayer)
-data ContingencyAction = ContingencyAction Operador Orientation Int Valor deriving (Eq, Show)
+data ContingencyAction = ContingencyAction Operador Orientation Int deriving (Eq, Show)
 
 instance (Show Orientation) where
     show UP = "ARR"
