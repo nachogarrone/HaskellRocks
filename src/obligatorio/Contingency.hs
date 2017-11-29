@@ -111,24 +111,80 @@ retrieveMovesByOperatorType oper n (x:xs) i actionList
             if (x == Vacia) then do
                 let left = i-1
                 let right = i+1
-                let up = i-8
-                let down = i+8
+                let up = i-7
+                let down = i+7
 
-                if (left >= 7 && left <= 41 && ((x:xs) !! left) /= Vacia) then
+                if (left >= 7 && left < 40 && ((x:xs) !! left) /= Vacia) then
                     (ContingencyAction oper LEFT left):actionList
                 else
                     actionList
                 
-                if (right <= 41 && ((x:xs) !! right) /= Vacia) then 
+                if (right >= 7 && right <= 41 && ((x:xs) !! right) /= Vacia) then 
                     (ContingencyAction oper RIGHT right):actionList
                 else
                     actionList
-                    
+                
+                if (up < 0 && ((x:xs) !! up) /= Vacia) then
+                    (ContingencyAction oper UP up):actionList
+                else
+                    actionList
+                
+                if (down < 48 && ((x:xs) !! down) /= Vacia) then
+                    (ContingencyAction oper DOWN down):actionList
+                else
+                    actionList
+                
                 retrieveMovesByOperatorType oper n xs (i+1) actionList
             else 
-                retrieveMovesByOperatorType oper n xs (i+1) actionList             
-        | n == 2 = []
-        | n == 3 = []
+                retrieveMovesByOperatorType oper n xs (i+1) actionList
+        
+        | n == 2 =
+            if (x == Vacia) then do
+                let left = i-1
+                let right = i+1
+                let up = i-7
+                let down = i+7
+
+                if ((left >= 7 && left < 40 && ((x:xs) !! left) /= Vacia) 
+                    && (right >= 7 && right <= 41 && ((x:xs) !! right) /= Vacia))  then
+                        (ContingencyAction oper LEFT left):actionList
+                else
+                    actionList
+
+                if ((up < 0 && ((x:xs) !! up) /= Vacia) && (down < 48 && ((x:xs) !! down) /= Vacia)) then
+                    (ContingencyAction oper UP up):actionList
+                else
+                    actionList     
+
+                retrieveMovesByOperatorType oper n xs (i+1) actionList
+            else 
+                retrieveMovesByOperatorType oper n xs (i+1) actionList
+
+        | n == 3 =
+            if (x == Vacia) then do
+                let left = i-1
+                let right = i+1
+                let up = i-7
+                let down = i+7
+
+                if ((left >= 7 && left < 40 && ((x:xs) !! left) /= Vacia) 
+                    && (right >= 7 && right <= 41 && ((x:xs) !! right) /= Vacia)
+                    && ((up < 0 && ((x:xs) !! up) /= Vacia) || (down < 48 && ((x:xs) !! down) /= Vacia)))  then
+                        (ContingencyAction oper LEFT left):actionList
+                else 
+                    actionList
+                
+                if ((up < 0 && ((x:xs) !! up) /= Vacia) && (down < 48 && ((x:xs) !! down) /= Vacia)
+                    && ((left >= 7 && left < 40 && ((x:xs) !! left) /= Vacia) 
+                    || (right >= 7 && right <= 41 && ((x:xs) !! right) /= Vacia))) then
+                        (ContingencyAction oper UP up):actionList
+                else
+                    actionList
+                
+                retrieveMovesByOperatorType oper n xs (i+1) actionList
+            else 
+                retrieveMovesByOperatorType oper n xs (i+1) actionList
+
         | otherwise = error("Wrong number of operands detected. We can't proccess it.")
 
 
