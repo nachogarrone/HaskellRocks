@@ -105,6 +105,11 @@ retrievePossibleMoves board (PlayerTrue opers) = do
     let newOpers = removeItem playerOperator opers
     let operandsNeeded = classifyOperator playerOperator
     retrieveMovesByOperatorType playerOperator operandsNeeded board 8 []
+retrievePossibleMoves board (PlayerFalse opers) = do
+    playerOperator <- return (head opers)
+    let newOpers = removeItem playerOperator opers
+    let operandsNeeded = classifyOperator playerOperator
+    retrieveMovesByOperatorType playerOperator operandsNeeded board 8 []
 
 classifyOperator :: Operador -> Int
 classifyOperator o
@@ -147,16 +152,13 @@ retrieveMovesByOperatorType oper n (x:xs) i actionList
                 let down = i+7
 
                 if ((left >= 7 && left < 40 && ((x:xs) !! left) /= Vacia) 
-                    && (right >= 7 && right <= 41 && ((x:xs) !! right) /= Vacia))  then
-                        error "left n = 2"
+                    && (right >= 7 && right <= 41 && ((x:xs) !! right) /= Vacia))  then                        
                         retrieveMovesByOperatorType oper n xs (i+1)((ContingencyAction oper LEFT (i+1)):actionList)
                 else
-                    if ((up > 0 && ((x:xs) !! up) /= Vacia) && (down < 48 && ((x:xs) !! down) /= Vacia)) then
-                        error "UP/DOWN n = 2"
+                    if ((up > 0 && ((x:xs) !! up) /= Vacia) && (down < 48 && ((x:xs) !! down) /= Vacia)) then                        
                         retrieveMovesByOperatorType oper n xs (i+1)((ContingencyAction oper UP (i+1)):actionList)
                     else
-                        --retrieveMovesByOperatorType oper n xs (i+1) actionList
-                        actionList
+                        retrieveMovesByOperatorType oper n xs (i+1) actionList                        
             else 
                 retrieveMovesByOperatorType oper n xs (i+1) actionList
 
@@ -177,8 +179,7 @@ retrieveMovesByOperatorType oper n (x:xs) i actionList
                         || (right >= 7 && right <= 41 && ((x:xs) !! right) /= Vacia))) then
                             retrieveMovesByOperatorType oper n xs (i+1)((ContingencyAction oper UP (i+1)):actionList)
                     else
-                        --retrieveMovesByOperatorType oper n xs (i+1) actionList
-                        actionList
+                        retrieveMovesByOperatorType oper n xs (i+1) actionList                        
             else 
                 retrieveMovesByOperatorType oper n xs (i+1) actionList                
 
