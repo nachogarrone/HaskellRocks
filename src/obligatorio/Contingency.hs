@@ -13,16 +13,17 @@ import System.IO.Unsafe
 constants = [(Constante True False),(Constante True False),(Constante True False),(Constante True False),
              (Constante False False),(Constante False False),(Constante False False),(Constante False False)]
 
-
 operators = [AND2,AND2,AND2,AND2,AND2,AND2, -- 6x AND2
-             OR2,OR2,OR2,OR2,OR2,OR2, -- 6x OR2
-             AND3,AND3,AND3, -- 3x AND3
-             OR3,OR3,OR3, -- 3x OR3
-             XOR,XOR,XOR,XOR, -- 4x XOR
-             IFF,IFF,IFF,IFF, -- 4x IFF
-             IF,IF, -- 2x IF
-             NOT,NOT -- 2x NOT
-             ]
+                OR2,OR2,OR2,OR2,OR2,OR2, -- 6x OR2
+                AND3,AND3,AND3, -- 3x AND3
+                OR3,OR3,OR3, -- 3x OR3
+                XOR,XOR,XOR,XOR, -- 4x XOR
+                IFF,IFF,IFF,IFF, -- 4x IFF
+                IF,IF, -- 2x IF
+                NOT,NOT -- 2x NOT
+                ]
+
+playableZone = [1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33 ,34 ,35, 36, 37, 38, 39, 40, 41, 43, 44, 45, 46, 47]
 
 -- Game logic stub ---------------------------------------------------------------------------------
 
@@ -119,69 +120,76 @@ classifyOperator o
 
 retrieveMovesByOperatorType :: Operador -> Int -> Tablero -> Int -> [ContingencyAction] -> [ContingencyAction]
 retrieveMovesByOperatorType _ _ [] _ _ = []
-retrieveMovesByOperatorType oper n (x:xs) i actionList 
+retrieveMovesByOperatorType _ _ _ 34 actionList = actionList
+retrieveMovesByOperatorType oper n board i actionList 
         | n == 1 =
-            if (x == Vacia) then do
+            if ((board !! i) == Vacia) then do
                 let left = i-1
                 let right = i+1
                 let up = i-7
-                let down = i+7
+                let down = i+7                
 
-                if (left >= 7 && left < 40 && ((x:xs) !! left) /= Vacia) then
-                    retrieveMovesByOperatorType oper n xs (i+1)((ContingencyAction oper LEFT (i+1)):actionList)                    
+                if ((board !! left) /= Vacia) then                    
+                    retrieveMovesByOperatorType oper n board (i+1)((ContingencyAction oper LEFT (i)):actionList)                    
                 else
-                    if (right >= 7 && right <= 41 && ((x:xs) !! right) /= Vacia) then
-                        retrieveMovesByOperatorType oper n xs (i+1)((ContingencyAction oper RIGHT (i+1)):actionList)
+                    if ((board !! right) /= Vacia) then
+                        retrieveMovesByOperatorType oper n board (i+1)((ContingencyAction oper RIGHT (i)):actionList)
                     else
-                        if (up > 0 && ((x:xs) !! up) /= Vacia) then
-                            retrieveMovesByOperatorType oper n xs (i+1)((ContingencyAction oper UP (i+1)):actionList)
+                        if ((board !! up) /= Vacia) then
+                            retrieveMovesByOperatorType oper n board (i+1)((ContingencyAction oper UP (i)):actionList)
                         else
-                            if (down < 48 && ((x:xs) !! down) /= Vacia) then
-                                retrieveMovesByOperatorType oper n xs (i+1)((ContingencyAction oper DOWN (i+1)):actionList)
+                            if ((board !! down) /= Vacia) then
+                                retrieveMovesByOperatorType oper n board (i+1)((ContingencyAction oper DOWN (i)):actionList)
                             else
-                                --retrieveMovesByOperatorType oper n xs (i+1) actionList
-                                actionList
+                                retrieveMovesByOperatorType oper n board (i+1) actionList
+                                
             else 
-                retrieveMovesByOperatorType oper n xs (i+1) actionList
+                retrieveMovesByOperatorType oper n board (i+1) actionList
         
         | n == 2 =
-            if (x == Vacia) then do
+            if ((board !! i) == Vacia) then do
                 let left = i-1
                 let right = i+1
                 let up = i-7
                 let down = i+7
 
-                if ((left >= 7 && left < 40 && ((x:xs) !! left) /= Vacia) 
-                    && (right >= 7 && right <= 41 && ((x:xs) !! right) /= Vacia))  then                        
-                        retrieveMovesByOperatorType oper n xs (i+1)((ContingencyAction oper LEFT (i+1)):actionList)
+                if ((elem left playableZone && (board !! left) /= Vacia) 
+                    && (elem right playableZone&& (board !! right) /= Vacia))  then                        
+                        retrieveMovesByOperatorType oper n board (i+1)((ContingencyAction oper LEFT (i)):actionList)
                 else
-                    if ((up > 0 && ((x:xs) !! up) /= Vacia) && (down < 48 && ((x:xs) !! down) /= Vacia)) then                        
-                        retrieveMovesByOperatorType oper n xs (i+1)((ContingencyAction oper UP (i+1)):actionList)
+                    if ((elem up playableZone && (board !! up) /= Vacia) && (elem down playableZone && (board !! down) /= Vacia)) then                        
+                        retrieveMovesByOperatorType oper n board (i+1)((ContingencyAction oper UP (i)):actionList)
                     else
-                        retrieveMovesByOperatorType oper n xs (i+1) actionList                        
+                        if (i < 49) then
+                            retrieveMovesByOperatorType oper n board (i+1) actionList
+                        else 
+                            actionList
             else 
-                retrieveMovesByOperatorType oper n xs (i+1) actionList
+                if (i < 49) then
+                    retrieveMovesByOperatorType oper n board (i+1) actionList
+                else
+                    actionList
 
         | n == 3 =
-            if (x == Vacia) then do
+            if ((board !! i) == Vacia) then do
                 let left = i-1
                 let right = i+1
                 let up = i-7
                 let down = i+7
 
-                if ((left >= 7 && left < 40 && ((x:xs) !! left) /= Vacia) 
-                    && (right >= 7 && right <= 41 && ((x:xs) !! right) /= Vacia)
-                    && ((up < 0 && ((x:xs) !! up) /= Vacia) || (down < 48 && ((x:xs) !! down) /= Vacia)))  then
-                        retrieveMovesByOperatorType oper n xs (i+1)((ContingencyAction oper LEFT (i+1)):actionList)
+                if ((elem left playableZone && (board !! left) /= Vacia) 
+                    && (elem right playableZone && (board !! right) /= Vacia)
+                    && ((elem up playableZone && (board !! up) /= Vacia) || (elem down playableZone && (board !! down) /= Vacia)))  then
+                        retrieveMovesByOperatorType oper n board (i+1)((ContingencyAction oper LEFT (i)):actionList)
                 else 
-                    if ((up > 0 && ((x:xs) !! up) /= Vacia) && (down < 48 && ((x:xs) !! down) /= Vacia)
-                        && ((left >= 7 && left < 40 && ((x:xs) !! left) /= Vacia)
-                        || (right >= 7 && right <= 41 && ((x:xs) !! right) /= Vacia))) then
-                            retrieveMovesByOperatorType oper n xs (i+1)((ContingencyAction oper UP (i+1)):actionList)
+                    if (elem up playableZone && (board !! up) /= Vacia) && (elem down playableZone && (board !! down) /= Vacia)
+                        && ((elem left playableZone && (board !! left) /= Vacia)
+                        || ((elem right playableZone && (board !! right) /= Vacia))) then
+                            retrieveMovesByOperatorType oper n board (i+1)((ContingencyAction oper UP (i)):actionList)
                     else
-                        retrieveMovesByOperatorType oper n xs (i+1) actionList                        
+                        retrieveMovesByOperatorType oper n board (i+1) actionList                        
             else 
-                retrieveMovesByOperatorType oper n xs (i+1) actionList                
+                retrieveMovesByOperatorType oper n board (i+1) actionList                
 
         | otherwise = error("Wrong number of operands detected. We can't proccess it.")
 
