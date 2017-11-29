@@ -27,18 +27,26 @@ operators = [AND2,AND2,AND2,AND2,AND2,AND2, -- 6x AND2
 -- Game logic stub ---------------------------------------------------------------------------------
 
 type Tablero = [Casilla]
-type Constantes = [Constante]
+-- type Constantes = [(Constante Bool Bool)]
 type Operadores = [Operador]
 data Operador = AND2 | AND3 | OR2 | OR3 | XOR | IFF | IF | NOT | NULO deriving (Eq, Show, Enum)
-data Casilla = Casilla Constante | Operador Orientation | Vacia deriving (Eq)
+data Casilla = Constante Valor Estado | Op Operador Orientation | Vacia deriving (Eq)
 
 instance (Show Casilla) where
-    show Vacia = "[    ]"
-    show (Casilla (Constante v e)) = if e then if v then "[ CT ]" else "[ CF ]" else "[ C? ]"
+    show Vacia = "[      ]"
+    show ((Constante v e)) = if e then if v then "[  CT  ]" else "[  CF  ]" else "[  C?  ]"
+    show (Op AND2 orient) = "[ AN2 " ++ (show orient) ++ "]"
+    show (Op OR2 orient) = "[ OR2 " ++ (show orient)++ "]"
+    show (Op AND3 orient) = "[ AN3 " ++ (show orient)++ "]"
+    show (Op OR3 orient) = "[ OR3 " ++ (show orient)++ "]"
+    show (Op XOR orient) = "[ XOR " ++ (show orient)++ "]"
+    show (Op IFF orient) = "[ IFF " ++ (show orient)++ "]"
+    show (Op IF orient) = "[ IF  " ++ (show orient)++ "]"
+    show (Op NOT orient) = "[ NOT " ++ (show orient)++ "]"
 
-data Constante = Constante Valor Estado deriving (Eq)
-instance (Show Constante) where
-    show (Constante v e) = show v
+-- data Constante = Constante Valor Estado deriving (Eq)
+-- instance (Show Constante) where
+--     show (Constante v e) = show v
 
 
 type Valor = Bool
@@ -51,10 +59,10 @@ data ContingencyGame = ContingencyGame Tablero (ContingencyPlayer, ContingencyPl
 data ContingencyAction = ContingencyAction Operador Orientation Int deriving (Eq, Show)
 
 instance (Show Orientation) where
-    show UP = "ARR"
-    show DOWN = "ABA"
-    show RIGHT = "DER"
-    show LEFT = "IZQ"
+    show UP = "^"
+    show DOWN = "D"
+    show RIGHT = ">"
+    show LEFT = "<"
 
 -- OESTE
 
@@ -77,7 +85,7 @@ contarOper :: Tablero -> Int
 contarOper tabl = length (filter (filtroOper) tabl)
 
 filtroOper :: Casilla -> Bool
-filtroOper (Operador _) = True
+filtroOper (Op _ _) = True
 filtroOper _ = False
 
 -------------------------------
@@ -183,8 +191,7 @@ nextState (ContingencyGame board operators) player (ContingencyAction operator o
     | otherwise = return (ContingencyGame (executeAction board (ContingencyAction operator orientation n)) operators)
 
 executeAction :: Tablero -> ContingencyAction -> Tablero
-executeAction board (ContingencyAction operator orientation n) = board
--- executeAction casillas (ContingencyAction operator orientation n) = replace casillas n (operator orientation)
+executeAction casillas (ContingencyAction operator orientation n) = replace casillas n (Op operator orientation)
 
 isFinished :: ContingencyGame -> Bool
 isFinished (ContingencyGame board operators) = if ((length (filter (== Vacia) board))==4) then True else False
@@ -228,7 +235,6 @@ randomAgent game player = let _actions = actions game player in do
                                 if rnum < 0 then return (ContingencyAction NULO UP 0) else return (_actions !! rnum)
 
 
-
 --  a1, a5, b2, b4, d2, d4, e1 y e5.
 positions = "0TTTTT0T10001FT01010FT00000FT01010FT10001F0FFFFF0"
 buildBoard constants = do
@@ -237,10 +243,10 @@ buildBoard constants = do
 
 mapPosition [] _ _ = []
 mapPosition (x:xs) c i
-    | x == '1' = ((Casilla (c !! i)) : (mapPosition xs c (i+1)))
+    | x == '1' = (((c !! i)) : (mapPosition xs c (i+1)))
     | x == '0' = (Vacia: (mapPosition xs c i))
-    | x == 'T' = ((Casilla (Constante True True)) : (mapPosition xs c (i)))
-    | x == 'F' = ((Casilla (Constante False True)) : (mapPosition xs c (i)))
+    | x == 'T' = (((Constante True True)) : (mapPosition xs c (i)))
+    | x == 'F' = (((Constante False True)) : (mapPosition xs c (i)))
     | otherwise = error("Wrong cell detected")
 
 runMatch :: (ContingencyPlayer, ContingencyPlayer) -> ContingencyGame -> IO (Int, Int)
@@ -289,8 +295,8 @@ replace :: [Casilla] -> Int  -> Casilla -> [Casilla]
 replace xs n el = take n xs ++ [el] ++ drop (n + 1) xs
 
 enableConstant :: Casilla -> Casilla
-enableConstant (Casilla (Constante v False)) = (Casilla (Constante v True))
-enableConstant (Casilla (Constante v True)) = (Casilla (Constante v True))
+enableConstant ((Constante v False)) = ((Constante v True))
+enableConstant ((Constante v True)) = ((Constante v True))
 enableConstant c = c
 
 generatePlayerOperators :: (ContingencyPlayer, ContingencyPlayer) -> Operadores -> IO (ContingencyPlayer, ContingencyPlayer)
