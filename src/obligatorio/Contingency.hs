@@ -29,7 +29,7 @@ operators = [AND2,AND2,AND2,AND2,AND2,AND2, -- 6x AND2
 type Tablero = [Casilla]
 type Constantes = [Constante]
 type Operadores = [Operador]
-data Operador = AND2 | AND3 | OR2 | OR3 | XOR | IFF | IF | NOT deriving (Eq, Show, Enum)
+data Operador = AND2 | AND3 | OR2 | OR3 | XOR | IFF | IF | NOT | NULO deriving (Eq, Show, Enum)
 data Casilla = Casilla Constante | Operador Orientation | Vacia deriving (Eq)
 
 instance (Show Casilla) where
@@ -84,8 +84,8 @@ filtroOper _ = False
 
 actions :: ContingencyGame -> ContingencyPlayer -> [ContingencyAction]
 actions (ContingencyGame board (PlayerTrue opTrue, PlayerFalse opFalse)) player = do
-    let actPlayer = (activePlayer (ContingencyGame board (PlayerTrue opTrue, PlayerFalse opFalse)))
-    if (fromJust actPlayer) /= player then []
+    let actPlayer = fromJust (activePlayer (ContingencyGame board (PlayerTrue opTrue, PlayerFalse opFalse)))
+    if (actPlayer) /= player then []
     else do
         retrievePossibleMoves board player
 
@@ -191,10 +191,10 @@ nextState :: ContingencyGame -> ContingencyPlayer -> ContingencyAction -> IO Con
 nextState (ContingencyGame board operators) player (ContingencyAction operator orientation n)
     | (isFinished (ContingencyGame board operators)) = error "Juego ya finalizado!"
     | not (elem (ContingencyAction operator orientation n) (actions (ContingencyGame board operators) player)) = error "La casilla no se puede ubicar ahi!"
-    | otherwise = error "To implement"
+    | otherwise = return (ContingencyGame (executeAction board (ContingencyAction operator orientation n)) operators)
 
 executeAction :: Tablero -> ContingencyAction -> Tablero
-executeAction board (ContingencyAction operation orientation n) = board
+executeAction casillas (ContingencyAction operation orientation n) = replace casillas n (operation orientation)
 
 isFinished :: ContingencyGame -> Bool
 isFinished (ContingencyGame board operators) = if ((length (filter (== Vacia) board))==4) then True else False
@@ -231,8 +231,11 @@ consoleAgent _ _ = error "consoleAgent has not been implemented!"
 
 randomAgent :: ContingencyGame -> ContingencyPlayer -> IO ContingencyAction
 randomAgent game player = let _actions = actions game player in do
+                                print player
+                                print _actions
                                 rnum <- getStdRandom (randomR (0,(length _actions) - 1))
-                                return (_actions !! rnum)
+                                print rnum
+                                if rnum < 0 then return (ContingencyAction NULO UP 0) else return (_actions !! rnum)
 
 
 
