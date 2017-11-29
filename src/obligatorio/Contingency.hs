@@ -47,7 +47,7 @@ type Estado = Bool
 data Orientation = UP | DOWN | LEFT | RIGHT deriving (Eq)
 
 data ContingencyPlayer = PlayerTrue Operadores | PlayerFalse Operadores deriving (Eq, Show)
-data ContingencyGame = ContingencyGame Tablero (ContingencyPlayer, ContingencyPlayer)
+data ContingencyGame = ContingencyGame Tablero (ContingencyPlayer, ContingencyPlayer) deriving (Show)
 data ContingencyAction = ContingencyAction Operador Orientation Int deriving (Eq, Show)
 
 instance (Show Orientation) where
@@ -107,49 +107,49 @@ classifyOperator o
 retrieveMovesByOperatorType :: Operador -> Int -> Tablero -> Int -> [ContingencyAction] -> [ContingencyAction]
 retrieveMovesByOperatorType _ _ [] _ _ = []
 retrieveMovesByOperatorType oper n (x:xs) i actionList 
-        | n == 1 =            
-            if (x == Vacia) then do                                          
+        | n == 1 =
+            if (x == Vacia) then do
                 let left = i-1
                 let right = i+1
                 let up = i-7
                 let down = i+7
 
-                if (left >= 7 && left < 40 && ((x:xs) !! left) /= Vacia) then                   
+                if (left >= 7 && left < 40 && ((x:xs) !! left) /= Vacia) then
                     (ContingencyAction oper LEFT left):actionList
                 else
-                    if (right >= 7 && right <= 41 && ((x:xs) !! right) /= Vacia) then                         
+                    if (right >= 7 && right <= 41 && ((x:xs) !! right) /= Vacia) then
                         (ContingencyAction oper RIGHT right):actionList
                     else
-                        if (up < 0 && ((x:xs) !! up) /= Vacia) then                            
+                        if (up < 0 && ((x:xs) !! up) /= Vacia) then
                             (ContingencyAction oper UP up):actionList
                         else
-                            if (down < 48 && ((x:xs) !! down) /= Vacia) then                                
+                            if (down < 48 && ((x:xs) !! down) /= Vacia) then
                                 (ContingencyAction oper DOWN down):actionList
                             else
                                 retrieveMovesByOperatorType oper n xs (i+1) actionList
             else 
                 retrieveMovesByOperatorType oper n xs (i+1) actionList
         
-        | n == 2 =            
-            if (x == Vacia) then do                
+        | n == 2 =
+            if (x == Vacia) then do
                 let left = i-1
                 let right = i+1
                 let up = i-7
                 let down = i+7
 
                 if ((left >= 7 && left < 40 && ((x:xs) !! left) /= Vacia) 
-                    && (right >= 7 && right <= 41 && ((x:xs) !! right) /= Vacia))  then                        
+                    && (right >= 7 && right <= 41 && ((x:xs) !! right) /= Vacia))  then
                         (ContingencyAction oper LEFT left):actionList
                 else
-                    if ((up < 0 && ((x:xs) !! up) /= Vacia) && (down < 48 && ((x:xs) !! down) /= Vacia)) then                   
+                    if ((up < 0 && ((x:xs) !! up) /= Vacia) && (down < 48 && ((x:xs) !! down) /= Vacia)) then
                         (ContingencyAction oper UP up):actionList
                     else
-                        retrieveMovesByOperatorType oper n xs (i+1) actionList                
+                        retrieveMovesByOperatorType oper n xs (i+1) actionList
             else 
                 retrieveMovesByOperatorType oper n xs (i+1) actionList
 
-        | n == 3 =           
-            if (x == Vacia) then do                
+        | n == 3 =
+            if (x == Vacia) then do
                 let left = i-1
                 let right = i+1
                 let up = i-7
@@ -157,12 +157,12 @@ retrieveMovesByOperatorType oper n (x:xs) i actionList
 
                 if ((left >= 7 && left < 40 && ((x:xs) !! left) /= Vacia) 
                     && (right >= 7 && right <= 41 && ((x:xs) !! right) /= Vacia)
-                    && ((up < 0 && ((x:xs) !! up) /= Vacia) || (down < 48 && ((x:xs) !! down) /= Vacia)))  then                        
+                    && ((up < 0 && ((x:xs) !! up) /= Vacia) || (down < 48 && ((x:xs) !! down) /= Vacia)))  then
                         (ContingencyAction oper LEFT left):actionList
                 else 
                     if ((up < 0 && ((x:xs) !! up) /= Vacia) && (down < 48 && ((x:xs) !! down) /= Vacia)
-                        && ((left >= 7 && left < 40 && ((x:xs) !! left) /= Vacia) 
-                        || (right >= 7 && right <= 41 && ((x:xs) !! right) /= Vacia))) then                            
+                        && ((left >= 7 && left < 40 && ((x:xs) !! left) /= Vacia)
+                        || (right >= 7 && right <= 41 && ((x:xs) !! right) /= Vacia))) then
                             (ContingencyAction oper UP up):actionList
                     else
                         retrieveMovesByOperatorType oper n xs (i+1) actionList
@@ -215,7 +215,7 @@ consoleAgent :: ContingencyGame -> ContingencyPlayer -> IO ContingencyAction
 consoleAgent _ _ = error "consoleAgent has not been implemented!"
 
 randomAgent :: ContingencyGame -> ContingencyPlayer -> IO ContingencyAction
-randomAgent game player = let _actions = actions game player in do                                
+randomAgent game player = let _actions = actions game player in do
                                 print player
                                 print _actions
                                 rnum <- getStdRandom (randomR (0,(length _actions) - 1))
@@ -246,14 +246,14 @@ runMatch players@(agTrue, agFalse) g = do
   then
     return (score g agTrue, score g agFalse)
   else do
-    let active = fromJust (activePlayer g)   
-    nextAction <- (randomAgent g active)    
+    let active = fromJust (activePlayer g)
+    nextAction <- (randomAgent g active)
     nextBoard <- (nextState g active nextAction)
     runMatch players nextBoard
 
 runOnConsole :: IO (Int, Int)
 runOnConsole = do
-  board <- beginning  
+  board <- beginning
   runMatch (PlayerTrue [], PlayerFalse []) board
 
 
