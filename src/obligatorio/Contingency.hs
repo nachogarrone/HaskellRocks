@@ -126,6 +126,18 @@ classifyOperator o
         | (o == AND3) || (o == OR3) = 3
         | otherwise = 1
 
+classifyCeld :: Casilla -> Int
+classifyCeld (Op AND2 orient) = 2
+classifyCeld (Op OR2 orient) = 2
+classifyCeld (Op IFF orient) = 2
+classifyCeld (Op IF orient) = 2
+classifyCeld (Op XOR orient) = 2
+classifyCeld (Op AND3 orient) = 3
+classifyCeld (Op OR3 orient) = 3
+classifyCeld (Op NOT orient) = 1
+
+    
+
 retrieveMovesByOperatorType :: Operador -> Int -> Tablero -> Int -> [ContingencyAction] -> [ContingencyAction]
 retrieveMovesByOperatorType _ _ [] _ _ = []
 retrieveMovesByOperatorType _ _ _ 41 actionList = actionList
@@ -137,16 +149,16 @@ retrieveMovesByOperatorType oper n board i actionList
                 let up = i-7
                 let down = i+7                
 
-                if ((board !! left) /= Vacia) then                    
+                if ((elem left playableZone) && (board !! left) /= Vacia) then                    
                     retrieveMovesByOperatorType oper n board (i+1)((ContingencyAction oper LEFT (i)):actionList)                    
                 else
-                    if ((board !! right) /= Vacia) then
+                    if ((elem right playableZone) && (board !! right) /= Vacia) then
                         retrieveMovesByOperatorType oper n board (i+1)((ContingencyAction oper RIGHT (i)):actionList)
                     else
-                        if ((board !! up) /= Vacia) then
+                        if ((elem up playableZone) && (board !! up) /= Vacia) then
                             retrieveMovesByOperatorType oper n board (i+1)((ContingencyAction oper UP (i)):actionList)
                         else
-                            if ((board !! down) /= Vacia) then
+                            if ((elem down playableZone) && (board !! down) /= Vacia) then
                                 retrieveMovesByOperatorType oper n board (i+1)((ContingencyAction oper DOWN (i)):actionList)
                             else
                                 retrieveMovesByOperatorType oper n board (i+1) actionList
@@ -216,43 +228,6 @@ isFinished (ContingencyGame board operators) = if ((length (filter (== Vacia) bo
 score :: ContingencyGame -> ContingencyPlayer -> Int
 score (ContingencyGame board (playerT, playerF)) (PlayerTrue _) = contarOper board True
 score (ContingencyGame board (playerT, playerF)) (PlayerFalse _) = contarOper board False
--- score (ContingencyGame board (playerT, playerF)) (PlayerTrue _) = (length (filter True board))
--- score (ContingencyGame board (playerT, playerF)) (PlayerFalse _) = (length (filter False board))
-
--- evalBoard :: Tablero -> Int -> Operador -> Orientation-> Bool
--- evalBoard board pos NOT UP = not (evalField(board!!(pos - 7)))
--- evalBoard board pos NOT DOWN = not (evalField(board!!(pos + 7)))
--- evalBoard board pos NOT RIGHT = not (evalField(board!!(pos + 1)))
--- evalBoard board pos NOT LEFT = not (evalField(board!!(pos - 1)))
---
--- evalBoard board pos AND2 UP = evalField(board!!(pos - 7)) && evalField(board!!(pos + 7))
--- evalBoard board pos AND2 RIGHT = evalField(board!!(pos - 1)) && evalField(board!!(pos + 1))
---
--- evalBoard board pos OR2 UP = evalField(board!!(pos - 7)) || evalField(board!!(pos + 7))
--- evalBoard board pos OR2 RIGHT = evalField(board!!(pos - 1)) || evalField(board!!(pos + 1))
---
--- evalBoard board pos AND3 UP = evalField(board!!(pos - 7)) && (evalField(board!!(pos - 1)) && evalField(board!!(pos + 1)))
--- evalBoard board pos AND3 RIGHT = evalField(board!!(pos - 7)) && (evalField(board!!(pos + 7)) && evalField(board!!(pos + 1)))
--- evalBoard board pos AND3 DOWN = evalField(board!!(pos - 1)) && (evalField(board!!(pos + 7)) && evalField(board!!(pos + 1)))
--- evalBoard board pos AND3 LEFT = evalField(board!!(pos - 7)) && (evalField(board!!(pos - 1)) && evalField(board!!(pos + 7)))
---
--- evalBoard board pos OR3 UP = evalField(board!!(pos - 7)) || (evalField(board!!(pos - 1)) || evalField(board!!(pos + 1)))
--- evalBoard board pos OR3 RIGHT = evalField(board!!(pos - 7)) || (evalField(board!!(pos + 7)) || evalField(board!!(pos + 1)))
--- evalBoard board pos OR3 DOWN = evalField(board!!(pos - 1)) || (evalField(board!!(pos + 7)) || evalField(board!!(pos + 1)))
--- evalBoard board pos OR3 LEFT = evalField(board!!(pos - 7)) || (evalField(board!!(pos - 1)) || evalField(board!!(pos + 7)))
-
-
--- evalBoard board pos XOR LEFT = evalField(board!!(pos - 7)) || (evalField(board!!(pos - 1)) || evalField(board!!(pos + 7)))
-
-
--- evalBoard board pos IFF LEFT = evalField(board!!(pos - 7)) || (evalField(board!!(pos - 1)) || evalField(board!!(pos + 7)))
-
-
--- evalBoard board pos IF LEFT = evalField(board!!(pos - 7)) || (evalField(board!!(pos - 1)) || evalField(board!!(pos + 7)))
-
-
--- evalField :: Casilla -> Bool
--- evalField (Constante v _) = v
 
 showBoard :: ContingencyGame -> String
 showBoard (ContingencyGame board _)  = auxTabl board 0
@@ -301,15 +276,24 @@ mapPosition (x:xs) c i
 runMatch :: (ContingencyPlayer, ContingencyPlayer) -> ContingencyGame -> IO (Int, Int)
 runMatch players@(agTrue, agFalse) g = do
   putStrLn (showBoard g)
-  if
-    (isFinished g)
-  then
+  if (isFinished g) then
     return (score g agTrue, score g agFalse)
   else do
     let active = fromJust (activePlayer g)
     nextAction <- (randomAgent g active)
     nextBoard <- (nextState g active nextAction)
     runMatch players nextBoard
+
+--loadTruthValues :: ContingencyGame -> Int
+loadTruthValues (ContingencyGame board (playerT, playerF)) index  = 
+    do
+    let casilla = board !! index
+    if (casilla == (Op Operador Orientation)) then
+        -- let operandsNeeded = Just(classifyCeld (board !! index))
+        loadTruthValues (ContingencyGame board (playerT, playerF) (index+1))
+    else 
+        loadTruthValues (ContingencyGame board (playerT, playerF) (index+1))
+    
 
 runOnConsole :: IO (Int, Int)
 runOnConsole = do
