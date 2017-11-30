@@ -78,16 +78,24 @@ beginning = do
 activePlayer :: ContingencyGame -> Maybe ContingencyPlayer
 activePlayer (ContingencyGame board (PlayerTrue opT, PlayerFalse opF)) = if (isFinished (ContingencyGame board (PlayerTrue opT, PlayerFalse opF))) then
     Nothing else
-        (if ((mod (contarOper board) 2)==0) then
+        (if ((mod (contarOper board True) 2)==0) then
             Just (PlayerTrue opT)
             else Just (PlayerFalse opF))
 
-contarOper :: Tablero -> Int
-contarOper tabl = length (filter (filtroOper) tabl)
+contarOper :: Tablero -> Bool -> Int
+contarOper tabl True = length (filter (filterTrue) tabl)
+contarOper tabl False = length (filter (filterFalse) tabl)
 
-filtroOper :: Casilla -> Bool
-filtroOper (Op _ _) = True
-filtroOper _ = False
+filterTrue :: Casilla -> Bool
+filterTrue (Op _ _) = True
+filterTrue (Constante v _) = v
+filterTrue _ = False
+
+filterFalse :: Casilla -> Bool
+filterFalse (Op _ _) = False
+filterFalse (Constante v _) = v
+filterFalse _ = False
+
 
 -------------------------------
 
@@ -120,7 +128,7 @@ classifyOperator o
 
 retrieveMovesByOperatorType :: Operador -> Int -> Tablero -> Int -> [ContingencyAction] -> [ContingencyAction]
 retrieveMovesByOperatorType _ _ [] _ _ = []
-retrieveMovesByOperatorType _ _ _ 34 actionList = actionList
+retrieveMovesByOperatorType _ _ _ 41 actionList = actionList
 retrieveMovesByOperatorType oper n board i actionList 
         | n == 1 =
             if ((board !! i) == Vacia) then do
@@ -196,7 +204,6 @@ retrieveMovesByOperatorType oper n board i actionList
 nextState :: ContingencyGame -> ContingencyPlayer -> ContingencyAction -> IO ContingencyGame
 nextState (ContingencyGame board operators) player (ContingencyAction operator orientation n)
     | (isFinished (ContingencyGame board operators)) = error "Juego ya finalizado!"
-    | not (elem (ContingencyAction operator orientation n) (actions (ContingencyGame board operators) player)) = error "La casilla no se puede ubicar ahi!"
     | otherwise = return (ContingencyGame (executeAction board (ContingencyAction operator orientation n)) operators)
 
 executeAction :: Tablero -> ContingencyAction -> Tablero
@@ -207,14 +214,48 @@ isFinished (ContingencyGame board operators) = if ((length (filter (== Vacia) bo
 
 
 score :: ContingencyGame -> ContingencyPlayer -> Int
-score _ _ = error "not implemented"
--- score (ContingencyGame tab (playerT, playerF)) player
---     | player == playerT = (length (filter True tab))
---     | player == playerF = (length (filter False tab))
+score (ContingencyGame board (playerT, playerF)) (PlayerTrue _) = contarOper board True
+score (ContingencyGame board (playerT, playerF)) (PlayerFalse _) = contarOper board False
+-- score (ContingencyGame board (playerT, playerF)) (PlayerTrue _) = (length (filter True board))
+-- score (ContingencyGame board (playerT, playerF)) (PlayerFalse _) = (length (filter False board))
+
+-- evalBoard :: Tablero -> Int -> Operador -> Orientation-> Bool
+-- evalBoard board pos NOT UP = not (evalField(board!!(pos - 7)))
+-- evalBoard board pos NOT DOWN = not (evalField(board!!(pos + 7)))
+-- evalBoard board pos NOT RIGHT = not (evalField(board!!(pos + 1)))
+-- evalBoard board pos NOT LEFT = not (evalField(board!!(pos - 1)))
+--
+-- evalBoard board pos AND2 UP = evalField(board!!(pos - 7)) && evalField(board!!(pos + 7))
+-- evalBoard board pos AND2 RIGHT = evalField(board!!(pos - 1)) && evalField(board!!(pos + 1))
+--
+-- evalBoard board pos OR2 UP = evalField(board!!(pos - 7)) || evalField(board!!(pos + 7))
+-- evalBoard board pos OR2 RIGHT = evalField(board!!(pos - 1)) || evalField(board!!(pos + 1))
+--
+-- evalBoard board pos AND3 UP = evalField(board!!(pos - 7)) && (evalField(board!!(pos - 1)) && evalField(board!!(pos + 1)))
+-- evalBoard board pos AND3 RIGHT = evalField(board!!(pos - 7)) && (evalField(board!!(pos + 7)) && evalField(board!!(pos + 1)))
+-- evalBoard board pos AND3 DOWN = evalField(board!!(pos - 1)) && (evalField(board!!(pos + 7)) && evalField(board!!(pos + 1)))
+-- evalBoard board pos AND3 LEFT = evalField(board!!(pos - 7)) && (evalField(board!!(pos - 1)) && evalField(board!!(pos + 7)))
+--
+-- evalBoard board pos OR3 UP = evalField(board!!(pos - 7)) || (evalField(board!!(pos - 1)) || evalField(board!!(pos + 1)))
+-- evalBoard board pos OR3 RIGHT = evalField(board!!(pos - 7)) || (evalField(board!!(pos + 7)) || evalField(board!!(pos + 1)))
+-- evalBoard board pos OR3 DOWN = evalField(board!!(pos - 1)) || (evalField(board!!(pos + 7)) || evalField(board!!(pos + 1)))
+-- evalBoard board pos OR3 LEFT = evalField(board!!(pos - 7)) || (evalField(board!!(pos - 1)) || evalField(board!!(pos + 7)))
+
+
+-- evalBoard board pos XOR LEFT = evalField(board!!(pos - 7)) || (evalField(board!!(pos - 1)) || evalField(board!!(pos + 7)))
+
+
+-- evalBoard board pos IFF LEFT = evalField(board!!(pos - 7)) || (evalField(board!!(pos - 1)) || evalField(board!!(pos + 7)))
+
+
+-- evalBoard board pos IF LEFT = evalField(board!!(pos - 7)) || (evalField(board!!(pos - 1)) || evalField(board!!(pos + 7)))
+
+
+-- evalField :: Casilla -> Bool
+-- evalField (Constante v _) = v
 
 showBoard :: ContingencyGame -> String
 showBoard (ContingencyGame board _)  = auxTabl board 0
---showBoard _ = error "showBoard has not been implemented!" --TODO
 
 auxTabl :: Tablero -> Int -> String
 auxTabl [x] 6 = show x ++ "\n"
@@ -236,12 +277,11 @@ consoleAgent :: ContingencyGame -> ContingencyPlayer -> IO ContingencyAction
 consoleAgent _ _ = error "consoleAgent has not been implemented!"
 
 randomAgent :: ContingencyGame -> ContingencyPlayer -> IO ContingencyAction
-randomAgent game player = let _actions = actions game player in do
-                                print player
-                                print _actions
-                                rnum <- getStdRandom (randomR (0,(length _actions) - 1))
-                                print rnum
-                                if rnum < 0 then return (ContingencyAction NULO UP 0) else return (_actions !! rnum)
+randomAgent game player = let _actions = actions game player in
+                                if _actions == [] then return (ContingencyAction NULO UP 0) else do
+                                    print _actions
+                                    rnd <- getStdRandom (randomR (0,(length _actions) - 1))
+                                    return (_actions !! rnd)
 
 
 --  a1, a5, b2, b4, d2, d4, e1 y e5.
